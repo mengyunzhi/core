@@ -7,10 +7,14 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
+        <module name="coretest" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="core" target="1.8" />
+      <module name="coreparent" target="1.8" />
+      <module name="coretest" target="1.8" />
+      <module name="mengyunzhi" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
