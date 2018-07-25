@@ -1,0 +1,4 @@
+com.mengyunzhi.core.annotation.query
+com.mengyunzhi.core.entity
+com.mengyunzhi.core.repository
+com.mengyunzhi.core.service
