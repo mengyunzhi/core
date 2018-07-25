@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5215336c-b931-4bd2-9fd1-aacbc6c4e140" name="Default" comment="重新整理模块名">
-      <change beforePath="" afterPath="$PROJECT_DIR$/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/.gitignore" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/.mvn/wrapper/maven-wrapper.jar" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/.mvn/wrapper/maven-wrapper.properties" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/README.md" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/mvnw" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/mvnw.cmd" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/pom.xml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/src/main/java/com/mengunzhi/coretest/CoretestApplication.java" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/src/main/resources/application.yml" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/test/src/test/java/com/mengunzhi/coretest/CoretestApplicationTests.java" />
+    <list default="true" id="5215336c-b931-4bd2-9fd1-aacbc6c4e140" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -343,7 +332,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1532520665659</updated>
-      <workItem from="1532520669298" duration="6705000" />
+      <workItem from="1532520669298" duration="6714000" />
     </task>
     <task id="LOCAL-00001" summary="增加测试模块">
       <created>1532522496151</created>
@@ -366,7 +355,14 @@
       <option name="project" value="LOCAL" />
       <updated>1532531654244</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="重新整理模块名">
+      <created>1532531673977</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1532531673977</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -375,7 +371,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="6705000" />
+    <option name="totallyTimeSpent" value="6714000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
