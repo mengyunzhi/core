@@ -3,6 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/coretest" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/test" charset="UTF-8" />
   </component>
 </project>

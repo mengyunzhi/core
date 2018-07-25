@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="coretest" />
+        <module name="test" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -15,6 +16,7 @@
       <module name="coreparent" target="1.8" />
       <module name="coretest" target="1.8" />
       <module name="mengyunzhi" target="1.8" />
+      <module name="test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
