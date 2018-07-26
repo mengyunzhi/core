@@ -9,6 +9,33 @@
     <version>1.5.3.RELEASE</version>
     <packaging>pom</packaging>
 
+    <name>${project.groupId}:${project.artifactId}</name>
+    <url>https://github.com/mengyunzhi/core</url>
+    <description>河北工业大学梦云智开发团队核心库</description>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>panjie</name>
+            <email>panjie@mengyunzhi.com</email>
+            <organization>mengyunzhi.com</organization>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/mengyunzhi/core.git</connection>
+        <developerConnection>scm:git:https://github.com/mengyunzhi/core.git</developerConnection>
+        <url>https://github.com/mengyunzhi/core</url>
+        <tag>v${project.version}</tag>
+    </scm>
+
     <modules>
         <module>core</module>
         <module>test</module>
