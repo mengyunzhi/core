@@ -22,6 +22,7 @@ import java.util.stream.IntStream;
  */
 public interface CommonService {
     Logger logger = LoggerFactory.getLogger(CommonService.class);
+
     // 获取长度为length的随机字符串
     static String getRandomStringByLength(int length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -109,6 +110,8 @@ public interface CommonService {
      *
      * @param multipartFile 需要加密的文件
      * @param algorithm     加密算法, 例如: MD5, SHA-1, SHA-256, SHA-512 等
+     * @return 字符串
+     * @throws Exception 异常
      */
     static String encrypt(MultipartFile multipartFile, String algorithm) throws Exception {
         InputStream in = null;
@@ -170,6 +173,7 @@ public interface CommonService {
      * https://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances
      * 获取两个时间的差
      * 示例代码 getDateDiff(date1, date2, TimeUnit.MINUTES);
+     *
      * @param date1    时间1
      * @param date2    时间2
      * @param timeUnit 获取的两者时间差的单位（比如：天，小时，分，秒等，详见TimeUnit）
@@ -182,6 +186,7 @@ public interface CommonService {
 
     /**
      * 获取管理部门名称
+     *
      * @return String
      */
     static String getManageDepartmentName() {
@@ -190,6 +195,7 @@ public interface CommonService {
 
     /**
      * 将sql.Date 转换成Calendar
+     *
      * @param date sql.Date
      * @return Calendar
      * @author panjie
@@ -206,6 +212,7 @@ public interface CommonService {
 
     /**
      * 获取一个所有字段均为null的对象
+     *
      * @param tClass 类对象
      * @return Object
      */
