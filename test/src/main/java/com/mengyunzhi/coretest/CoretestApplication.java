@@ -1,9 +1,9 @@
-package com.mengunzhi.coretest;
+package com.mengyunzhi.coretest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.mengyunzhi.*")
 public class CoretestApplication {
 
 	public static void main(String[] args) {

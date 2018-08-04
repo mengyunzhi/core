@@ -1,0 +1,13 @@
+
+debug: true
+logging:
+  level:
+    root: debug
+    com:
+      mengyunzhi: debug
+    org:
+      hibernate:
+        SQL: trace
+        type:
+          descriptor:
+            sql: trace

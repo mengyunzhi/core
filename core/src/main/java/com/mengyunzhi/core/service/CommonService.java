@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -40,6 +41,16 @@ public interface CommonService {
             for (Field field : fields) {
                 String name = field.getName();
                 if (name.equals("serialVersionUID")) {
+                    continue;
+                }
+
+                if (Modifier.isFinal(field.getModifiers())) {
+                    logger.debug("字段类型为final");
+                    continue;
+                }
+
+                if (Modifier.isStatic(field.getModifiers())) {
+                    logger.debug("字段类型为static");
                     continue;
                 }
 
