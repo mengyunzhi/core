@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Embeddable;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -149,7 +150,14 @@ public class YunzhiServiceImpl implements YunzhiService {
                                     // todo: 一对多，多对多查询
                                 }
                             } else {
-                                logger.error("综合查询暂不支持传入的数据类型:" + name.toString() + field.toString());
+                                Class<?> clazz = value.getClass();
+                                if (clazz.isAnnotationPresent(Embeddable.class)) {
+                                    logger.debug("为内部Embeddable");
+                                    this.generatePredicate(value, root.join(name));
+                                } else {
+                                    logger.error("综合查询暂不支持传入的数据类型:" + name + "->" + field.toString());
+                                }
+
                             }
                         }
                     }
@@ -160,10 +168,10 @@ public class YunzhiServiceImpl implements YunzhiService {
 
             /**
              * in 查询
-             * @param root
-             * @param field
-             * @param value
-             * @return
+             * @param root 联结
+             * @param field 字段
+             * @param value 值
+             * @return 存在IN查询，TRUE；不存在，false.
              */
             private Boolean inQuery(From<Object, ?> root, Field field, Object value) {
                 // 获取in注解
