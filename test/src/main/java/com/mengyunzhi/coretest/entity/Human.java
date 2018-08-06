@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
  */
 @MappedSuperclass
 public abstract class Human {
-    private Boolean sex;
+    private Boolean sex = true;
 
     public Boolean getSex() {
         return sex;

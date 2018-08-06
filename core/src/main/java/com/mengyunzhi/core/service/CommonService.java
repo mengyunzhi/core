@@ -36,7 +36,7 @@ public interface CommonService {
 
     // 将所有的字段设置为null
     static void setAllFieldsToNull(Object object) {
-        Field[] fields = object.getClass().getDeclaredFields();
+        List<Field> fields = getAllModelFields(object.getClass());
         try {
             for (Field field : fields) {
                 String name = field.getName();
