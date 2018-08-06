@@ -64,7 +64,7 @@ public class YunzhiServiceImpl implements YunzhiService {
 
             private void generatePredicate(Object entity, From<Object, ?> root) {
                 logger.debug("反射字段，按字段类型，进行综合查询");
-                Field[] fields = entity.getClass().getDeclaredFields();
+                Field[] fields = entity.getClass().getFields();
                 try {
                     for (Field field : fields) {
                         logger.debug("设置字段可见，并获取实体值");

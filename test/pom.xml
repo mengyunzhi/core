@@ -33,11 +33,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>com.mengyunzhi</groupId>
-			<artifactId>core</artifactId>
-			<version>1.5.3.RELEASE</version>
-		</dependency>
 
 		<dependency>
 			<groupId>com.h2database</groupId>
@@ -49,7 +44,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>com.mengyunzhi</groupId>
+            <artifactId>core</artifactId>
+            <version>1.5.3.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 	<build>
 		<plugins>

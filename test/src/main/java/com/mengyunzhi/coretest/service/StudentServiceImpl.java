@@ -15,6 +15,7 @@ public class StudentServiceImpl implements StudentService {
         student.getAddress().setNubmer("number");
         student.getAddress().setStreet("street");
         student.setName("name");
+        student.setSex(true);
         studentRepository.save(student);
         return student;
     }
