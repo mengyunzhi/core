@@ -9,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Student implements YunZhiEntity {
+public class Student extends Human implements YunZhiEntity {
     private final static Logger logger = LoggerFactory.getLogger(Student.class);
     @Id
     @GeneratedValue
