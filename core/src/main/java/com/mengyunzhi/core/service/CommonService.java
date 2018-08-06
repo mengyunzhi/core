@@ -1,5 +1,6 @@
 package com.mengyunzhi.core.service;
 
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,9 +11,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
@@ -103,6 +102,20 @@ public interface CommonService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * 获取所有的属性（包含其父类）
+     * @param aClass 类
+     * @return 所有的字段
+     */
+    static List<Field> getAllModelFields(Class aClass) {
+        List<Field> fields = new ArrayList<>();
+        do {
+            Collections.addAll(fields, aClass.getDeclaredFields());
+            aClass = aClass.getSuperclass();
+        } while (aClass != null);
+        return fields;
     }
 
     /**

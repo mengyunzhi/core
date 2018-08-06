@@ -64,7 +64,8 @@ public class YunzhiServiceImpl implements YunzhiService {
 
             private void generatePredicate(Object entity, From<Object, ?> root) {
                 logger.debug("反射字段，按字段类型，进行综合查询");
-                Field[] fields = entity.getClass().getFields();
+
+                List<Field> fields = CommonService.getAllModelFields(entity.getClass());
                 try {
                     for (Field field : fields) {
                         logger.debug("设置字段可见，并获取实体值");
@@ -104,7 +105,11 @@ public class YunzhiServiceImpl implements YunzhiService {
                             }
 
                             // 按字段类型进行查询
-                            if (value instanceof String) {
+                            if (value instanceof Boolean) {
+                                logger.debug("布尔值");
+                                Boolean booleanValue = ((Boolean) value);
+                                this.andPredicate(criteriaBuilder.equal(root.get(name).as(Boolean.class), booleanValue));
+                            } else if (value instanceof String) {
                                 logger.debug("字符串则进行模糊查询");
                                 String stringValue = ((String) value);
                                 if (!stringValue.isEmpty()) {
