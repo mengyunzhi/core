@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
@@ -117,7 +118,10 @@ public class YunzhiServiceImpl implements YunzhiService {
                                 }
                             } else if (value instanceof Number) {
                                 logger.debug("如果为number，则进行精确或范围查询");
-                                if (value instanceof Short) {
+                                if (value instanceof Byte) {
+                                    Byte byteValue = (Byte) value;
+                                    this.andPredicate(criteriaBuilder.equal(root.get(name).as(Byte.class), byteValue));
+                                } else if (value instanceof Short) {
                                     Short shortValue = (Short) value;
                                     this.andPredicate(criteriaBuilder.equal(root.get(name).as(Short.class), shortValue));
                                 } else if (value instanceof Integer) {
@@ -127,7 +131,7 @@ public class YunzhiServiceImpl implements YunzhiService {
                                     Long longValue = (Long) value;
                                     this.andPredicate(criteriaBuilder.equal(root.get(name).as(Long.class), longValue));
                                 } else {
-                                    logger.error("综合查询Number类型，暂时只支持到Short,Integer,Long");
+                                    logger.error("综合查询Number类型，暂时只支持到Byte, Short,Integer,Long");
                                 }
                             } else if (value instanceof Calendar) {
                                 logger.debug("Calendar类型");
