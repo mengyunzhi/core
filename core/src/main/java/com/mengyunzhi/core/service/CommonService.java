@@ -22,6 +22,45 @@ import java.util.stream.IntStream;
 public interface CommonService {
     Logger logger = LoggerFactory.getLogger(CommonService.class);
 
+    /**
+     * 获取随机的INT数
+     * @param min 最小值
+     * @param max 最大值
+     * @return
+     */
+    static int getRandomNumberInts(int min, int max) {
+        Random random = new Random();
+        return random.ints(min, (max + 1)).findFirst().getAsInt();
+    }
+
+    /**
+     * 获取随机的LONG数
+     * @param min 最小值
+     * @param max 最大值
+     * @return
+     */
+    static long getRandomNumberLongs(long min, long max) {
+        Random random = new Random();
+        return random.longs(min, (max + 1)).findFirst().getAsLong();
+    }
+
+    ArrayList<Long> ids = new ArrayList<>();
+
+    /**
+     * 获取一个随机的唯一的ID
+     * 注意：该方法只能在单元测试中使用
+     * @return
+     */
+    static Long getRandomUniqueId() {
+        Long id;
+        do {
+            id = CommonService.getRandomNumberLongs(10000L, 20000L);
+        } while (CommonService.ids.contains(id));
+        ids.add(id);
+        return id;
+    }
+
+
     // 获取长度为length的随机字符串
     static String getRandomStringByLength(int length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -54,7 +93,7 @@ public interface CommonService {
                     continue;
                 }
 
-                logger.info("将字段设置为设置为null");
+                logger.debug("将字段设置为设置为null");
                 field.setAccessible(true);
                 field.set(object, null);
             }

@@ -42,6 +42,15 @@ public class YunzhiServiceImplTest extends ServiceTest {
         studentList = (List<Student>) yunzhiService.findAll(studentRepository, student1);
         Assertions.assertThat(studentList.size()).isEqualTo(0);
 
+        student1.setSex(null);
+        student1.setAge((byte) 2);
+        studentList = (List<Student>) yunzhiService.findAll(studentRepository, student1);
+        Assertions.assertThat(studentList.size()).isEqualTo(0);
+
+        student1.setAge((byte) 20);
+        studentList = (List<Student>) yunzhiService.findAll(studentRepository, student1);
+        Assertions.assertThat(studentList.size()).isEqualTo(1);
+
     }
 
 }

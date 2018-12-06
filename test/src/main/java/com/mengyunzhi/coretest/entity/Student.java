@@ -15,6 +15,7 @@ public class Student extends Human implements YunZhiEntity {
     @GeneratedValue
     private Long id;
     private String name;
+    private Byte age;
     private Address address = new Address();
 
     @Override
@@ -40,5 +41,13 @@ public class Student extends Human implements YunZhiEntity {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Byte getAge() {
+        return age;
+    }
+
+    public void setAge(Byte age) {
+        this.age = age;
     }
 }
