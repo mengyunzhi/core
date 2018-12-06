@@ -6,7 +6,7 @@
 
     <groupId>com.mengyunzhi</groupId>
     <artifactId>parent</artifactId>
-    <version>1.5.3.1-SNAPSHOT</version>
+    <version>1.5.3.1-release</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -23,7 +23,7 @@
     <developers>
         <developer>
             <name>panjie</name>
-            <email>panjie@mengyunzhi.com</email>
+            <email>panjie@yunzhiclub.com</email>
             <organization>mengyunzhi.com</organization>
             <timezone>+8</timezone>
         </developer>
