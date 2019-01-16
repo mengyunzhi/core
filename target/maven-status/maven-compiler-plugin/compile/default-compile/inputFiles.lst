@@ -1,8 +1,0 @@
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/annotation/query/GreaterThanOrEqualTo.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/service/YunzhiService.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/annotation/query/LessThanOrEqualTo.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/service/CommonService.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/annotation/query/In.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/repository/YunZhiRepository.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/entity/YunzhiEntity.java
-/Users/panjie/github/mengyunzhi/core/src/main/java/com/mengyunzhi/core/annotation/query/Ignore.java
