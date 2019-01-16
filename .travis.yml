@@ -1,0 +1,42 @@
+# 声明使用语言
+language: java
+
+# 声明JDK版本
+jdk:
+- oraclejdk8
+
+# travis升级后，增加该选项
+group: edge
+
+
+# 声明使用的服务
+services:
+- docker
+
+# 通知方式
+notifications:
+  email: false
+  webhooks: https://oapi.dingtalk.com/robot/send?access_token=e6447f7cce1e94b2bd8a1caba7b30f7b6ea59217cebe37d7b39a22b77257d98e
+
+# 脚本
+script:
+# - grunt test
+- mvn clean install
+- cd test
+- mvn test
+
+# 声明缓存
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+# 脚本执行成功后，进入文档文件夹，并强行push到项目的gh-page分支，生成项目文档
+after_success:
+# - cd target/asciidoc/html
+# - git init
+# - git config user.name "${GH_USER_NAME}"
+# - git config user.email "{GH_USER_EMAIL}"
+# - git add . ; git commit -m "Deploy to GitHub Pages"
+# - git status
+# - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages
