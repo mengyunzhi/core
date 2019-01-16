@@ -1,6 +1,6 @@
 package com.mengyunzhi.core.service;
 
-
+import com.mengyunzhi.core.entity.YunzhiEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -10,21 +10,8 @@ import java.util.List;
 /**
  * @author panjie
  */
-public interface YunzhiService {
-    /**
-     * 通过传入的实体进行多条件查询
-     * @param entity
-     * @param pageable
-     * @return
-     * panjie
-     */
-    Page<?> page(JpaSpecificationExecutor jpaSpecificationExecutor, Object entity, Pageable pageable);
+public interface YunzhiService<T> {
+    Page<T> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity, Pageable pageable);
 
-    /**
-     * 通过传入的实体查询所有数据
-     * @param entity
-     * @return
-     * panjie
-     */
-    List<?> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, Object entity);
+    List<T> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity);
 }

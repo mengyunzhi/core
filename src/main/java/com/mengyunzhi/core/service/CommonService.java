@@ -1,18 +1,20 @@
 package com.mengyunzhi.core.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
 /**
  * Created by panjie on 17/7/6.
@@ -20,77 +22,30 @@ import java.util.concurrent.TimeUnit;
  */
 public interface CommonService {
     Logger logger = LoggerFactory.getLogger(CommonService.class);
-    // 获取长度为length的随机字符串
-    static String getRandomStringByLength(int length) {
-        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        Random random = new Random();
-        StringBuilder buf = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int num = random.nextInt(62);
-            buf.append(str.charAt(num));
+    // 十六进制字符数组
+    char[] HEXES = {
+            '0', '1', '2', '3',
+            '4', '5', '6', '7',
+            '8', '9', 'a', 'b',
+            'c', 'd', 'e', 'f'
+    };
+
+    ArrayList<Long> ids = new ArrayList<>();
+
+    // 将字节转为字符串
+    static String bytesToString(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) {
+            return null;
         }
-        return buf.toString();
-    }
 
-    // 将所有的字段设置为null
-    static void setAllFieldsToNull(Object object) {
-        Field[] fields = object.getClass().getDeclaredFields();
-        try {
-            for (Field field : fields) {
-                String name = field.getName();
-                if (name.equals("serialVersionUID")) {
-                    continue;
-                }
+        StringBuilder stringBuilder = new StringBuilder();
 
-                logger.info("将字段设置为设置为null");
-                field.setAccessible(true);
-                field.set(object, null);
-            }
-        } catch (IllegalAccessException e) {
-            logger.info("设置字段值为null发生异常", object);
-            e.printStackTrace();
+        for (byte b : bytes) {
+            stringBuilder.append(HEXES[(b >> 4) & 0x0F]);
+            stringBuilder.append(HEXES[b & 0x0F]);
         }
-    }
 
-    // https://www.dexcoder.com/selfly/article/4026
-    static String md5(String str) throws Exception {
-        try {
-            // 生成一个MD5加密计算摘要
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            // 计算md5函数
-            md.update(str.getBytes());
-            // digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符
-            // BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
-            return new BigInteger(1, md.digest()).toString(16);
-        } catch (Exception e) {
-            throw new Exception("MD5加密出现错误");
-        }
-    }
-
-    // sha1加密
-    static String sha1(String data) {
-        try {
-            MessageDigest digest = MessageDigest
-                    .getInstance("SHA-1");
-
-            digest.update(data.getBytes());
-            byte messageDigest[] = digest.digest();
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            // 字节数组转换为 十六进制 数
-            for (int i = 0; i < messageDigest.length; i++) {
-                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
-                if (shaHex.length() < 2) {
-                    hexString.append(0);
-                }
-                hexString.append(shaHex);
-            }
-            return hexString.toString();
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
+        return stringBuilder.toString();
     }
 
     /**
@@ -98,6 +53,8 @@ public interface CommonService {
      *
      * @param multipartFile 需要加密的文件
      * @param algorithm     加密算法, 例如: MD5, SHA-1, SHA-256, SHA-512 等
+     * @return 字符串
+     * @throws Exception 异常
      */
     static String encrypt(MultipartFile multipartFile, String algorithm) throws Exception {
         InputStream in = null;
@@ -131,34 +88,26 @@ public interface CommonService {
         }
     }
 
-    // 将字节转为字符串
-    static String bytesToString(byte[] bytes) {
-        if (bytes == null || bytes.length == 0) {
-            return null;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for (byte b : bytes) {
-            stringBuilder.append(HEXES[(b >> 4) & 0x0F]);
-            stringBuilder.append(HEXES[b & 0x0F]);
-        }
-
-        return stringBuilder.toString();
+    /**
+     * 获取所有的属性（包含其父类）
+     *
+     * @param aClass 类
+     * @return 所有的字段
+     */
+    static List<Field> getAllModelFields(Class aClass) {
+        List<Field> fields = new ArrayList<>();
+        do {
+            Collections.addAll(fields, aClass.getDeclaredFields());
+            aClass = aClass.getSuperclass();
+        } while (aClass != null);
+        return fields;
     }
-
-    // 十六进制字符数组
-    char[] HEXES = {
-            '0', '1', '2', '3',
-            '4', '5', '6', '7',
-            '8', '9', 'a', 'b',
-            'c', 'd', 'e', 'f'
-    };
 
     /**
      * https://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances
      * 获取两个时间的差
      * 示例代码 getDateDiff(date1, date2, TimeUnit.MINUTES);
+     *
      * @param date1    时间1
      * @param date2    时间2
      * @param timeUnit 获取的两者时间差的单位（比如：天，小时，分，秒等，详见TimeUnit）
@@ -170,31 +119,8 @@ public interface CommonService {
     }
 
     /**
-     * 获取管理部门名称
-     * @return String
-     */
-    static String getManageDepartmentName() {
-        return "赤峰市工商管理质量技术监督局";
-    }
-
-    /**
-     * 将sql.Date 转换成Calendar
-     * @param date sql.Date
-     * @return Calendar
-     * @author panjie
-     */
-    static Calendar sqlDateToCalendar(java.sql.Date date) {
-        Calendar calendar = null;
-        if (date != null) {
-            calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(date.getTime());
-        }
-
-        return calendar;
-    }
-
-    /**
      * 获取一个所有字段均为null的对象
+     *
      * @param tClass 类对象
      * @return Object
      */
@@ -212,7 +138,180 @@ public interface CommonService {
             logger.error("实例化对象发生ClassNotFoundException异常:" + tClass.getName());
             e.printStackTrace();
         }
-        CommonService.setAllFieldsToNull(object);
+        if (object != null)
+            CommonService.setAllFieldsToNull(object);
         return object;
     }
+
+
+    /**
+     * 获取随机的INT数
+     *
+     * @param min 最小值
+     * @param max 最大值
+     * @return 随机数
+     */
+    static int getRandomNumberInts(int min, int max) {
+        Random random = new Random();
+        OptionalInt number = random.ints(min, (max + 1)).findFirst();
+        if (number.isPresent())
+            return number.getAsInt();
+        else {
+            return Integer.parseInt(null);
+        }
+    }
+
+
+    /**
+     * 获取随机的LONG数
+     *
+     * @param min 最小值
+     * @param max 最大值
+     * @return 随机数
+     */
+    static long getRandomNumberLongs(long min, long max) {
+        Random random = new Random();
+        OptionalLong asLong = random.longs(min, (max + 1)).findFirst();
+        if (asLong.isPresent()) {
+            return asLong.getAsLong();
+        } else {
+            return Long.parseLong(null);
+        }
+    }
+
+
+    // 获取长度为length的随机字符串
+    static String getRandomStringByLength(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuilder buf = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int num = random.nextInt(62);
+            buf.append(str.charAt(num));
+        }
+        return buf.toString();
+    }
+
+    /**
+     * 获取一个随机的唯一的ID
+     * 注意：该方法只能在单元测试中使用
+     *
+     * @return 随机数
+     */
+    static Long getRandomUniqueId() {
+        return CommonService.getRandomUniqueId(10000L, 20000L);
+    }
+
+    /**
+     * 获取一个随机的唯一的ID
+     * 注意：该方法只能在单元测试中使用
+     *
+     * @return 随机数
+     */
+    static Long getRandomUniqueId(Long begin) {
+        return CommonService.getRandomUniqueId(begin, 20000L);
+    }
+
+    /**
+     * 获取一个随机的唯一的ID
+     * 注意：该方法只能在单元测试中使用
+     *
+     * @return 随机ID
+     */
+    static Long getRandomUniqueId(Long begin, Long end) {
+        Long id;
+        do {
+            id = CommonService.getRandomNumberLongs(begin, end);
+        } while (CommonService.ids.contains(id));
+        ids.add(id);
+        return id;
+    }
+
+    // https://www.dexcoder.com/selfly/article/4026
+    static String md5(String str) throws Exception {
+        try {
+            // 生成一个MD5加密计算摘要
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            // 计算md5函数
+            md.update(str.getBytes());
+            // digest()最后确定返回md5 hash值，返回值为8为字符串。因为md5 hash值是16位的hex值，实际上就是8位的字符
+            // BigInteger函数则将8位的字符串转换成16位hex值，用字符串来表示；得到字符串形式的hash值
+            return new BigInteger(1, md.digest()).toString(16);
+        } catch (Exception e) {
+            throw new Exception("MD5加密出现错误");
+        }
+    }
+
+    // 将所有的字段设置为null
+    static void setAllFieldsToNull(Object object) {
+        List<Field> fields = getAllModelFields(object.getClass());
+        try {
+            for (Field field : fields) {
+                String name = field.getName();
+                if (name.equals("serialVersionUID")) {
+                    continue;
+                }
+
+                if (Modifier.isFinal(field.getModifiers())) {
+                    logger.debug("字段类型为final");
+                    continue;
+                }
+
+                if (Modifier.isStatic(field.getModifiers())) {
+                    logger.debug("字段类型为static");
+                    continue;
+                }
+
+                logger.debug("将字段设置为设置为null");
+                field.setAccessible(true);
+                field.set(object, null);
+            }
+        } catch (IllegalAccessException e) {
+            logger.info("设置字段值为null发生异常", object);
+            e.printStackTrace();
+        }
+    }
+
+    // sha1加密
+    static String sha1(String data) {
+        try {
+            MessageDigest digest = MessageDigest
+                    .getInstance("SHA-1");
+
+            digest.update(data.getBytes());
+            byte messageDigest[] = digest.digest();
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            // 字节数组转换为 十六进制 数
+            IntStream.range(0, messageDigest.length).mapToObj(i -> Integer.toHexString(messageDigest[i] & 0xFF)).forEach(shaHex -> {
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            });
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * 将sql.Date 转换成Calendar
+     *
+     * @param date sql.Date
+     * @return Calendar
+     * @author panjie
+     */
+    static Calendar sqlDateToCalendar(java.sql.Date date) {
+        Calendar calendar = null;
+        if (date != null) {
+            calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(date.getTime());
+        }
+
+        return calendar;
+    }
+
 }
