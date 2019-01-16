@@ -16,7 +16,7 @@ services:
 # 通知方式
 notifications:
   email: false
-  webhooks: https://oapi.dingtalk.com/robot/send?access_token=22f6325cd1429636dd25bcc230d516fc903be477cc41ace0c38ef5e39fda49ef
+  webhooks: https://oapi.dingtalk.com/robot/send?access_token=79e5589b77eb77cf48079b2d48472110650ec5b62035638a152eebcfb329ca19
 
 # 脚本
 script:
