@@ -6,7 +6,7 @@
 
     <groupId>com.mengyunzhi</groupId>
     <artifactId>core</artifactId>
-    <version>2.0.2.RELEASE</version>
+    <version>2.1.1.RELEASE</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <url>https://github.com/mengyunzhi/core</url>
@@ -22,7 +22,7 @@
     <developers>
         <developer>
             <name>panjie</name>
-            <email>panjie@mengyunzhi.com</email>
+            <email>panjie@yunzhi.com</email>
             <organization>mengyunzhi.com</organization>
             <timezone>+8</timezone>
         </developer>
@@ -50,7 +50,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.2.RELEASE</version>
+        <version>2.1.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -68,6 +68,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <version>2.1.1.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <profiles>
@@ -93,7 +99,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc-plugin.version}</version>
+                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
