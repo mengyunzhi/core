@@ -16,7 +16,7 @@ services:
 # 通知方式
 notifications:
   email: false
-  webhooks: https://oapi.dingtalk.com/robot/send?access_token=22f6325cd1429636dd25bcc230d516fc903be477cc41ace0c38ef5e39fda49ef
+  webhooks: https://oapi.dingtalk.com/robot/send?access_token=79e5589b77eb77cf48079b2d48472110650ec5b62035638a152eebcfb329ca19
 
 # 脚本
 script:
@@ -34,6 +34,7 @@ cache:
 # 脚本执行成功后，进入文档文件夹，并强行push到项目的gh-page分支，生成项目文档
 after_success:
 # - cd target/asciidoc/html
+#
 # - git init
 # - git config user.name "${GH_USER_NAME}"
 # - git config user.email "{GH_USER_EMAIL}"
