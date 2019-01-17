@@ -6,8 +6,11 @@
 1.5.3 *弃用*
 1.5.3.1 *弃用*
 2.1.2 *弃用*
-3.0.0 适用于spring-boot:2.0.5
+3.0.0
 
+## 已验证版本
+spring-boot:2.0.5
+spring-boot:2.1.2
 
 # 使用方法
 ## 添加依赖
@@ -20,20 +23,20 @@
 ```
 
 ## 默认规则
-| 类型 | 规则 |
----
-| number | 判等 |
-| date | 判等 |
-| calender | 判等 |
-| string | 模糊查询 |
+类型 | 规则
+--- | ---
+number | 判等
+date | 判等
+calender | 判等
+string | 模糊查询
 
 ## 注解
-| 名称 | 作用 |
----
-| GreaterThanOrEqualTo | 大于等于某个字段的值 |
-| Ignore | 忽略查询注解的字段 |
-| In | 某个字段在该数组中 |
-| LessThanOrEqualTo | 小于等于某个字段的值 |
+名称 | 作用
+--- | ---
+GreaterThanOrEqualTo | 大于等于某个字段的值
+Ignore | 忽略查询注解的字段
+In | 某个字段在该数组中
+LessThanOrEqualTo | 小于等于某个字段的值
 
 ## 前提
 查询的实体，需要实现`YunzhiEntity`接口。
