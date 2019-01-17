@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.InputStreamSource;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -56,7 +56,7 @@ public interface CommonService {
      * @return 字符串
      * @throws Exception 异常
      */
-    static String encrypt(MultipartFile multipartFile, String algorithm) throws Exception {
+    static String encrypt(InputStreamSource multipartFile, String algorithm) throws Exception {
         InputStream in = null;
 
         try {
