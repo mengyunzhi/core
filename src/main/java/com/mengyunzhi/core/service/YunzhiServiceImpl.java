@@ -12,10 +12,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.util.Assert;
 
 import javax.persistence.Embeddable;
 import javax.persistence.criteria.*;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.sql.Date;
