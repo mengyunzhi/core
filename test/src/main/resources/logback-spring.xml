@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--开启debug模式-->
+<configuration>
+    <!--引入application配置信息-->
+    <springProperty scope="context" name="logUrl" source="yunzhi.log.url"
+                    defaultValue="localhost"/>
+
+    <!--引入内置文件过滤器-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--定义appender 名字 loggerly 用于发送http请求-->
+    <appender name="loggly" class="com.mengyunzhi.core.appender.LogglyAppender">
+        <endpointUrl>${logUrl}</endpointUrl>
+        <pattern>%d{"ISO8601", UTC} %p %t %c %M - %m%n</pattern>
+        <!--定义输出格式JSON-->
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                <prettyPrint>true</prettyPrint>
+            </jsonFormatter>
+            <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
+        </layout>
+    </appender>
+
+
+    <!--debug等级-->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="loggly"/>
+    </root>
+
+</configuration>

@@ -74,6 +74,7 @@ public class Teacher implements YunzhiEntity {
         this.endCreateTime = endCreateTime;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Long getId() {
         return id;

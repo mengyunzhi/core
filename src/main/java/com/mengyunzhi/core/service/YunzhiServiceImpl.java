@@ -25,10 +25,18 @@ import java.util.List;
 
 /**
  * @author panjie
+ * 团队综合查询实现类
  */
 public class YunzhiServiceImpl<T> implements YunzhiService<Object> {
     private final static Logger logger = LoggerFactory.getLogger(YunzhiServiceImpl.class);
 
+    /**
+     * 分页查询
+     * @param jpaSpecificationExecutor JPA综合查询SPEC
+     * @param entity 实体
+     * @param pageable 分页
+     * @return
+     */
     @Override
     public Page<Object> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity, Pageable pageable) {
         Specification<Object> specification = this.getSpecificationByEntity(entity);
@@ -118,7 +126,7 @@ public class YunzhiServiceImpl<T> implements YunzhiService<Object> {
                                 YunzhiEntity yunZhiEntity = (YunzhiEntity) value;
                                 if (yunZhiEntity.getId() != null) {
                                     logger.debug("对应的ManyToOne，加入了id, 则按ID查询");
-                                    this.andPredicate(criteriaBuilder.equal(root.join(name).get("id").as(Long.class), yunZhiEntity.getId()));
+                                    this.andPredicate(criteriaBuilder.equal(root.join(name).get("id"), yunZhiEntity.getId()));
                                 } else {
                                     logger.debug("未加入id, 则进行Join查询");
                                     this.generatePredicate(value, root.join(name));

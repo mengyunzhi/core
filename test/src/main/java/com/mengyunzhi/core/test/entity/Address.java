@@ -44,6 +44,7 @@ public class Address implements YunzhiEntity {
         this.num = num;
     }
     @Override
+    @SuppressWarnings("unchecked")
     public Long getId() {
         return id;
     }

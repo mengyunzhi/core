@@ -68,6 +68,7 @@ public class Klass implements YunzhiEntity {
         return ignoreTeacher;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Long getId() {
         return id;
