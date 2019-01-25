@@ -6,8 +6,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * @author panjie
  */
@@ -16,7 +14,7 @@ public class CommonServiceTest {
     @Test
     public void setAllFieldsToNull() {
         TestObject testObject = new TestObject();
-        testObject = (TestObject) CommonService.setAllFieldsToNull(testObject);
+        CommonService.setAllFieldsToNull(testObject);
         Assertions.assertThat(testObject.getId()).isNull();
         Assertions.assertThat(testObject.getName()).isNull();
         Assertions.assertThat(testObject.getCardList()).isNull();
