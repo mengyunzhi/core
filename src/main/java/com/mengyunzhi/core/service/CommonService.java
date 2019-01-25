@@ -243,7 +243,7 @@ public interface CommonService {
     }
 
     // 将所有的字段设置为null
-    static void setAllFieldsToNull(Object object) {
+    static Object setAllFieldsToNull(Object object) {
         List<Field> fields = getAllModelFields(object.getClass());
         try {
             for (Field field : fields) {
@@ -270,6 +270,8 @@ public interface CommonService {
             logger.info("设置字段值为null发生异常", object);
             e.printStackTrace();
         }
+
+        return object;
     }
 
     // sha1加密
