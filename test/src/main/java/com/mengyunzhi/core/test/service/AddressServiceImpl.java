@@ -1,6 +1,5 @@
 package com.mengyunzhi.core.test.service;
 
-import com.mengyunzhi.core.service.CommonService;
 import com.mengyunzhi.core.test.entity.Address;
 import com.mengyunzhi.core.test.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
