@@ -31,6 +31,12 @@
         </license>
     </licenses>
 
+    <!--声明子模块 开发环境将注释的内容启用-->
+    <!--<modules>-->
+        <!--<module>test</module>-->
+    <!--</modules>-->
+    <!--<packaging>pom</packaging>-->
+
     <developers>
         <developer>
             <name>panjie</name>

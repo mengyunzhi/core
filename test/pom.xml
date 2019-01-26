@@ -35,11 +35,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.mengyunzhi</groupId>
-            <artifactId>core</artifactId>
-            <version>3.0.0.RELEASE</version>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -48,6 +43,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mengyunzhi</groupId>
+            <artifactId>core</artifactId>
+            <version>3.0.0.RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
