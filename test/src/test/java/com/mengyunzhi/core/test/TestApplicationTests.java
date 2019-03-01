@@ -1,11 +1,14 @@
 package com.mengyunzhi.core.test;
 
+import com.mengyunzhi.core.service.CommonService;
 import com.mengyunzhi.core.service.YunzhiService;
 import com.mengyunzhi.core.service.YunzhiServiceImpl;
 import com.mengyunzhi.core.test.entity.Address;
 import com.mengyunzhi.core.test.entity.Klass;
+import com.mengyunzhi.core.test.entity.Student;
 import com.mengyunzhi.core.test.entity.Teacher;
 import com.mengyunzhi.core.test.repository.KlassRepository;
+import com.mengyunzhi.core.test.repository.StudentRepository;
 import com.mengyunzhi.core.test.service.AddressService;
 import com.mengyunzhi.core.test.service.KlassService;
 import com.mengyunzhi.core.test.service.TeacherService;
@@ -38,7 +41,11 @@ public class TestApplicationTests {
     AddressService addressService;
     @Autowired
     KlassRepository klassRepository;
+    @Autowired
+    StudentRepository studentRepository;
+
     YunzhiService yunzhiService;
+
 
     public TestApplicationTests() {
         this.yunzhiService = new YunzhiServiceImpl();
@@ -56,75 +63,75 @@ public class TestApplicationTests {
 
         logger.info("更改short值 ，断言返回为0");
         klass.setTotalStudentCount((short) 11);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("设置short值为null ，断言返回为1");
         klass.setTotalStudentCount(null);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("更改int值 ，断言返回为0");
         klass.setIntegerTest(101);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("设置int值为null ，断言返回为1");
         klass.setIntegerTest(null);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("更改long值 ，断言返回为0");
         klass.setLongTest((long) 1001);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("设置long值为null ，断言返回为1");
         klass.setLongTest(null);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("测试关联实体");
         klass = this.initQueryKlass();
         klass.setTeacher(originKlass.getTeacher());
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("更改关联实体");
         Teacher teacher = teacherService.getOneSavedTeacher();
         klass.setTeacher(teacher);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("测试二级关联实体Address");
         teacher = new Teacher();
         teacher.setAddress(originKlass.getTeacher().getAddress());
         klass.setTeacher(teacher);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("更改测试二级关联实体Address");
         teacher.setAddress(addressService.getOneSavedAddress());
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("测试二级关联实体 属性");
         Address address = new Address();
         address.setCity("测试城市");
         teacher.setAddress(address);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("测试二级关联实体 属性");
         address.setCity("测试城市不存在");
         teacher.setAddress(address);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("测试@IgnoreQueryParam注解");
         klass.setTeacher(null);
         klass.setIgnoreTeacher(teacher);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("测试@BeginQueryParam, @EndQueryParam注解在Calendar上在作用");
@@ -137,30 +144,30 @@ public class TestApplicationTests {
         endCalendar.setTimeInMillis(originKlass.getTeacher().getCreateTime().getTimeInMillis());
         teacher.setBeginCreateTime(beginCalendar);
         teacher.setEndCreateTime(endCalendar);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("将范围扩大");
         beginCalendar.add(Calendar.MINUTE, -1);
         endCalendar.add(Calendar.MINUTE, 1);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage =  yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("区间后移");
         beginCalendar.add(Calendar.MINUTE, 2);
         endCalendar.add(Calendar.MINUTE, 2);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("区间前移");
         beginCalendar.add(Calendar.MINUTE, -4);
         endCalendar.add(Calendar.MINUTE, -4);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("区间调换");
         beginCalendar.add(Calendar.MINUTE, 4);
-        klassPage = (Page<Klass>) yunzhiService.page(klassRepository, klass, pageRequest);
+        klassPage = yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
 
         logger.info("date的区间测试累了，不测了");
@@ -172,17 +179,31 @@ public class TestApplicationTests {
         Klass originKlass = klassService.getOneSavedKlass();
 
         Klass klass = this.initQueryKlass();
-        List<Klass> klassPage = (List<Klass>) yunzhiService.findAll(klassRepository, klass);
+        List<Klass> klassPage = yunzhiService.findAll(klassRepository, klass);
         Assertions.assertThat(klassPage.size()).isEqualTo(1);
 
         logger.info("测试二级关联实体Address");
         Teacher teacher = new Teacher();
         teacher.setAddress(originKlass.getTeacher().getAddress());
         klass.setTeacher(teacher);
-        klassPage = (List<Klass>) yunzhiService.findAll(klassRepository, klass);
+        klassPage = yunzhiService.findAll(klassRepository, klass);
         Assertions.assertThat(klassPage.size()).isEqualTo(1);
     }
 
+    /**
+     * 其它关键字类型
+     */
+    @Test
+    public void otherKeyType() {
+        logger.info("测试Interger类型是否支持");
+        Student student = new Student();
+        studentRepository.save(student);
+        Student queryStudent = (Student) CommonService.getNullFieldsObject(Student.class);
+        queryStudent.setId(student.getId());
+
+        List<Student> studentList = yunzhiService.findAll(this.studentRepository, queryStudent);
+        Assertions.assertThat(studentList.size()).isEqualTo(1);
+    }
     /**
      * 获取初始化用于查询的班级
      * @return

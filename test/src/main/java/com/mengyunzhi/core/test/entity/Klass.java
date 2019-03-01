@@ -9,7 +9,7 @@ import javax.persistence.*;
  * @author panjie
  */
 @Entity
-public class Klass implements YunzhiEntity {
+public class Klass implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;        // 班级名称
