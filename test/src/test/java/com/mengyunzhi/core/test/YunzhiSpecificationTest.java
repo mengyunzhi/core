@@ -58,7 +58,7 @@ public class YunzhiSpecificationTest {
         public static Specification<Klass> base(Klass klass) {
             return (Specification<Klass>) (root, criteriaQuery, criteriaBuilder) -> {
                 // 先获取YunzhiSpecification自动生成的查询条件
-                YunzhiSpecification<Klass> yunzhiSpecification = new YunzhiSpecification<>(klass);
+                YunzhiSpecification<Klass, Long> yunzhiSpecification = new YunzhiSpecification<>(klass);
                 Predicate predicate = yunzhiSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
 
                 // 再加入其它的查询条件。比如加入NAME查询

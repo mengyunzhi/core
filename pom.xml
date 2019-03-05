@@ -6,7 +6,7 @@
 
     <groupId>com.mengyunzhi</groupId>
     <artifactId>core</artifactId>
-    <version>3.0.0.RELEASE</version>
+    <version>3.0.1.release</version>
     <build>
         <plugins>
             <plugin>
@@ -32,10 +32,11 @@
     </licenses>
 
     <!--声明子模块 开发环境将注释的内容启用-->
-    <!--<modules>-->
-        <!--<module>test</module>-->
-    <!--</modules>-->
-    <!--<packaging>pom</packaging>-->
+    <modules>
+        <module>test</module>
+    </modules>
+    <packaging>pom</packaging>
+    <!--推送官方仓库时，将声明子模块代码注释掉，防止推送-->
 
     <developers>
         <developer>
@@ -53,17 +54,17 @@
         <tag>v${project.version}</tag>
     </scm>
 
-    <!--<distributionManagement>-->
-        <!--<snapshotRepository>-->
-            <!--<id>ossrh</id>-->
-            <!--<url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
-        <!--</snapshotRepository>-->
-        <!--<repository>-->
-            <!--<id>ossrh</id>-->
-            <!--<name>Maven Central Staging Repository</name>-->
-            <!--<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
-        <!--</repository>-->
-    <!--</distributionManagement>-->
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>Maven Central Staging Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

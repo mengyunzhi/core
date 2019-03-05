@@ -12,7 +12,7 @@ import javax.persistence.Id;
  * @author panjie
  */
 @Entity
-public class Address implements YunzhiEntity {
+public class Address implements YunzhiEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

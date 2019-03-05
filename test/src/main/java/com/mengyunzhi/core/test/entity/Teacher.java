@@ -13,7 +13,7 @@ import java.util.Calendar;
  * @author panjie
  */
 @Entity
-public class Teacher implements YunzhiEntity {
+public class Teacher implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

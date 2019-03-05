@@ -1,6 +1,7 @@
 package com.mengyunzhi.core.service;
 
 
+import com.mengyunzhi.core.entity.YunzhiEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,19 +15,19 @@ import java.util.List;
 public class YunzhiServiceImpl<T> implements YunzhiService<T> {
 
     @Override
-    public Page<T> page(JpaSpecificationExecutor jpaSpecificationExecutor, T entity, Pageable pageable) {
+    public Page<YunzhiEntity<T>> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity<T> entity, Pageable pageable) {
         Specification<T> specification = this.getSpecificationByEntity(entity);
         return jpaSpecificationExecutor.findAll(specification, pageable);
     }
 
     @Override
-    public List<T> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, T entity) {
+    public List<YunzhiEntity<T>> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity) {
         Specification<T> specification = this.getSpecificationByEntity(entity);
         return jpaSpecificationExecutor.findAll(specification);
     }
 
 
-    private Specification<T> getSpecificationByEntity(T entity) {
+    private Specification<T> getSpecificationByEntity(YunzhiEntity<T> entity) {
         Specification<T> specification = new YunzhiSpecification<>(entity);
         return specification;
     }

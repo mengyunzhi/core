@@ -21,13 +21,13 @@ import java.util.Collection;
  * @author panjie
  * 综合查询构造器
  */
-public class YunzhiSpecification<O> implements Specification<O> {
+public class YunzhiSpecification<O, T> implements Specification<O> {
     private final static Logger logger = LoggerFactory.getLogger(YunzhiSpecification.class);
     private Predicate predicate = null;
     private CriteriaBuilder criteriaBuilder;
-    private O entity;       // 实体
+    private YunzhiEntity<T> entity;       // 实体
 
-    public YunzhiSpecification(O entity) {
+    public YunzhiSpecification(YunzhiEntity entity) {
         this.entity = entity;
     }
 
@@ -105,7 +105,7 @@ public class YunzhiSpecification<O> implements Specification<O> {
                         YunzhiEntity yunZhiEntity = (YunzhiEntity) value;
                         if (yunZhiEntity.getId() != null) {
                             logger.debug("对应的ManyToOne，加入了id, 则按ID查询");
-                            this.andPredicate(criteriaBuilder.equal(root.join(name).get("id").as(Long.class), yunZhiEntity.getId()));
+                            this.andPredicate(criteriaBuilder.equal(root.join(name).get("id"), yunZhiEntity.getId()));
                         } else {
                             logger.debug("未加入id, 则进行Join查询");
                             this.generatePredicate(value, root.join(name));
