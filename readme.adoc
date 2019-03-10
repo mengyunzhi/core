@@ -1,0 +1,48 @@
+= 梦云智软件开发团队 核心库
+
+== 安装依赖
+
+[source,xml,indent=4]
+----
+        <dependency>
+            <groupId>com.mengyunzhi</groupId>
+            <artifactId>core</artifactId>
+            <version>3.0.1.release</version>
+        </dependency>
+----
+
+== 使用步骤
+
+=== 实体类
+实体类，需要实现YunzhiEntity，并传入实体的主键类型
+[source,java,indent=4]
+----
+@Entity
+public class Klass implements YunzhiEntity<Long> {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;        // 班级名称
+    private Short totalStudentCount;    // 学生总数
+    private Integer integerTest;        // 整形测试
+    private Long longTest;              // 长整形测试
+
+    @ManyToOne
+    private Teacher teacher;
+
+    @ManyToOne
+    @Ignore           // 忽略查询条件
+    private Teacher ignoreTeacher;
+
+    // setter and getter ..
+}
+
+----
+
+=== 仓库类
+[source,java,indent=4]
+----
+// 继承JpaSpecificationExecutor
+public interface KlassRepository extends CrudRepository<Klass, Long>, JpaSpecificationExecutor {
+}
+----
+
