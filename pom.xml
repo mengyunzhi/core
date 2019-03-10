@@ -21,10 +21,10 @@
     </licenses>
 
     <!--声明子模块 开发环境将注释的内容启用-->
-    <!--<modules>-->
-        <!--<module>test</module>-->
-    <!--</modules>-->
-    <!--<packaging>pom</packaging>-->
+    <modules>
+        <module>test</module>
+    </modules>
+    <packaging>pom</packaging>
     <!--推送官方仓库时，将声明子模块代码注释掉，防止推送-->
 
     <developers>
