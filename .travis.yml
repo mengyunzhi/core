@@ -18,9 +18,11 @@ notifications:
   email: false
   webhooks: https://oapi.dingtalk.com/robot/send?access_token=79e5589b77eb77cf48079b2d48472110650ec5b62035638a152eebcfb329ca19
 
+before_install:
+  - mv pom.travis.xml pom.xml
+
 # 脚本
 script:
-  - mvn clean install
   - cd test
   - mvn test
 
