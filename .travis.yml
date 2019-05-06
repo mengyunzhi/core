@@ -3,7 +3,7 @@ language: java
 
 # 声明JDK版本
 jdk:
-- oraclejdk8
+  - oraclejdk8
 
 # travis升级后，增加该选项
 group: edge
@@ -11,7 +11,7 @@ group: edge
 
 # 声明使用的服务
 services:
-- docker
+  - docker
 
 # 通知方式
 notifications:
@@ -20,10 +20,10 @@ notifications:
 
 # 脚本
 script:
-# - grunt test
-- mvn clean install
-- cd test
-- mvn test
+  - mv pom.travis.xml pom.xml
+  - mvn clean install
+  - cd test
+  - mvn test
 
 # 声明缓存
 cache:
