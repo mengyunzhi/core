@@ -17,11 +17,21 @@ public class Address implements YunzhiEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Boolean deleted = false;
     private String city;        // 市
     private String county;      // 县
     private Integer num;        // 号
 
     public Address() {
+    }
+
+    @Override
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 
     public String getCity() {

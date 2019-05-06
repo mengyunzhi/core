@@ -6,7 +6,7 @@
 
     <groupId>com.mengyunzhi</groupId>
     <artifactId>core</artifactId>
-    <version>2.0.5.1</version>
+    <version>2.0.5.1.release</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <url>https://github.com/mengyunzhi/core</url>
@@ -20,9 +20,6 @@
     </licenses>
 
     <!--声明子模块 开发环境将注释的内容启用-->
-    <!--<modules>-->
-    <!--<module>test</module>-->
-    <!--</modules>-->
     <packaging>pom</packaging>
     <!--推送官方仓库时，将声明子模块代码注释掉，防止推送-->
 
@@ -133,21 +130,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--推送到maven官方仓库时，需要启用以下注释内容，以保证生成签名-->
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-gpg-plugin</artifactId>-->
-            <!--<version>1.5</version>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>sign-artifacts</id>-->
-            <!--<phase>verify</phase>-->
-            <!--<goals>-->
-            <!--<goal>sign</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

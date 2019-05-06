@@ -14,7 +14,7 @@ import java.util.Optional;
  * 加入软删除
  */
 @NoRepositoryBean
-public interface YunZhiRepository<T, ID extends Serializable> extends CrudRepository<T, ID>, JpaSpecificationExecutor {
+public interface YunzhiRepository<T, ID extends Serializable> extends CrudRepository<T, ID>, JpaSpecificationExecutor {
     @Override
     @Transactional
     @Query("select e from #{#entityName} e where e.id = ?1 and e.deleted = false")
@@ -22,8 +22,8 @@ public interface YunZhiRepository<T, ID extends Serializable> extends CrudReposi
 
     @Override
     @Transactional
-    default boolean existsById(ID var1) {
-        return findById(var1) != null;
+    default boolean existsById(final ID var1) {
+        return this.findById(var1) != null;
     }
 
     @Override

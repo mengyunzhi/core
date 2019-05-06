@@ -3,7 +3,7 @@ language: java
 
 # 声明JDK版本
 jdk:
-- oraclejdk8
+  - oraclejdk8
 
 # travis升级后，增加该选项
 group: edge
@@ -11,19 +11,20 @@ group: edge
 
 # 声明使用的服务
 services:
-- docker
+  - docker
 
 # 通知方式
 notifications:
   email: false
   webhooks: https://oapi.dingtalk.com/robot/send?access_token=79e5589b77eb77cf48079b2d48472110650ec5b62035638a152eebcfb329ca19
 
+before_install:
+  - mv pom.travis.xml pom.xml
+
 # 脚本
 script:
-# - grunt test
-- mvn clean install
-- cd test
-- mvn test
+#  - cd test
+#  - mvn test
 
 # 声明缓存
 cache:
