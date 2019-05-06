@@ -20,7 +20,6 @@ notifications:
 
 # 脚本
 script:
-  - mv pom.travis.xml pom.xml
   - mvn clean install
   - cd test
   - mvn test
