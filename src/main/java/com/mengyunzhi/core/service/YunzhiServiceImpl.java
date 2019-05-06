@@ -12,23 +12,23 @@ import java.util.List;
 /**
  * @author panjie
  */
-public class YunzhiServiceImpl<T> implements YunzhiService<T> {
+public class YunzhiServiceImpl<O> implements YunzhiService<O> {
 
     @Override
-    public Page<YunzhiEntity<T>> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity<T> entity, Pageable pageable) {
-        Specification<T> specification = this.getSpecificationByEntity(entity);
+    public Page<O> page(final JpaSpecificationExecutor jpaSpecificationExecutor, final YunzhiEntity entity, final Pageable pageable) {
+        final Specification<O> specification = this.getSpecificationByEntity(entity);
         return jpaSpecificationExecutor.findAll(specification, pageable);
     }
 
     @Override
-    public List<YunzhiEntity<T>> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity) {
-        Specification<T> specification = this.getSpecificationByEntity(entity);
+    public List<O> findAll(final JpaSpecificationExecutor jpaSpecificationExecutor, final YunzhiEntity entity) {
+        final Specification<O> specification = this.getSpecificationByEntity(entity);
         return jpaSpecificationExecutor.findAll(specification);
     }
 
 
-    private Specification<T> getSpecificationByEntity(YunzhiEntity<T> entity) {
-        Specification<T> specification = new YunzhiSpecification<>(entity);
+    private Specification<O> getSpecificationByEntity(final YunzhiEntity entity) {
+        final Specification<O> specification = new YunzhiSpecification<>(entity);
         return specification;
     }
 }

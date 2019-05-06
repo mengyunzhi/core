@@ -58,7 +58,7 @@ public class TestApplicationTests {
         PageRequest pageRequest = PageRequest.of(0, 2);
 
         Klass klass = this.initQueryKlass();
-        Page<Klass> klassPage =  yunzhiService.page(klassRepository, klass, pageRequest);
+        Page klassPage =  yunzhiService.page(klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("更改short值 ，断言返回为0");

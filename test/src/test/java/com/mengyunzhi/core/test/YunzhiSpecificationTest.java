@@ -47,11 +47,11 @@ public class YunzhiSpecificationTest {
     @Test
     public void generatePredicate() {
         // 持久化一个班级，并初始化名称
-        Klass originKlass = klassService.getOneSavedKlass();
+        final Klass originKlass = this.klassService.getOneSavedKlass();
         originKlass.setName("xxx测试班级名称xxx");
-        klassRepository.save(originKlass);
-        Klass klass = new Klass();
-        PageRequest pageable = PageRequest.of(0, 2);
+        this.klassRepository.save(originKlass);
+        final Klass klass = new Klass();
+        final PageRequest pageable = PageRequest.of(0, 2);
 
         // 同时按 ID（-1） 及 班级名称查询, 断言0条记录
         klass.setId(-1L);
@@ -68,7 +68,7 @@ public class YunzhiSpecificationTest {
         // 修改班级名称后，再次查询，断言0条记录
         klass.setId(originKlass.getId());
         originKlass.setName("修改班级名称");
-        klassRepository.save(originKlass);
+        this.klassRepository.save(originKlass);
         specification = KlassSpecification.base(klass);
         klassPage = this.klassRepository.findAll(specification, pageable);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
@@ -83,18 +83,18 @@ public class YunzhiSpecificationTest {
          * @param klass 实体
          * @return
          */
-        public static Specification<Klass> base(Klass klass) {
+        public static Specification<Klass> base(final Klass klass) {
             /**
              * 直接return，则表示该方法为Specification接口中唯一需要必须实现的方法
              * 具体到此接口中，为：Predicate toPredicate(Root<T> var1, CriteriaQuery<?> var2, CriteriaBuilder var3);
              */
             return (Specification<Klass>) (root, criteriaQuery, criteriaBuilder) -> {
                 // 先获取YunzhiSpecification按传入的klass自动生成的查询条件
-                YunzhiSpecification<Klass, Long> yunzhiSpecification = new YunzhiSpecification<>(klass);
+                final YunzhiSpecification<Klass> yunzhiSpecification = new YunzhiSpecification<>(klass);
                 Predicate predicate = yunzhiSpecification.toPredicate(root, criteriaQuery, criteriaBuilder);
 
                 // 再加入NAME其它的查询条件。
-                Predicate predicate1 = criteriaBuilder.like(root.get("name").as(String.class), "%测试班级名称%");
+                final Predicate predicate1 = criteriaBuilder.like(root.get("name").as(String.class), "%测试班级名称%");
                 predicate = criteriaBuilder.and(predicate, predicate1);
                 return predicate;
             };

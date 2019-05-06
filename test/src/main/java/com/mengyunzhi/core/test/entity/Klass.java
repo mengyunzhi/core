@@ -12,10 +12,12 @@ import javax.persistence.*;
 public class Klass implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Boolean deleted = false;
     private String name;        // 班级名称
     private Short totalStudentCount;    // 学生总数
     private Integer integerTest;        // 整形测试
     private Long longTest;              // 长整形测试
+
 
     @ManyToOne
     private Teacher teacher;
@@ -23,6 +25,15 @@ public class Klass implements YunzhiEntity<Long> {
     @ManyToOne
     @Ignore           // 忽略查询条件
     private Teacher ignoreTeacher;
+
+    @Override
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 
     public String getName() {
         return name;

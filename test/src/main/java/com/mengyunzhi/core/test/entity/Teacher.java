@@ -17,6 +17,8 @@ public class Teacher implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Boolean deleted  = false;
+
     private String name;
     @ManyToOne
     private Address address;    // 住址
@@ -77,6 +79,11 @@ public class Teacher implements YunzhiEntity<Long> {
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public Boolean getDeleted() {
+        return this.getDeleted();
     }
 
     public void setId(Long id) {

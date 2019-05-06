@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * @author panjie
  */
-public interface YunzhiService<T> {
-    Page<YunzhiEntity<T>> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity<T> entity, Pageable pageable);
+public interface YunzhiService<O> {
+    Page<O> page(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity, Pageable pageable);
 
-    List<YunzhiEntity<T>> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity<T> entity);
+    List<O> findAll(JpaSpecificationExecutor jpaSpecificationExecutor, YunzhiEntity entity);
 }

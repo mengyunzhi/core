@@ -16,26 +16,29 @@ import java.lang.reflect.Modifier;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author panjie
  * 综合查询构造器
  */
-public class YunzhiSpecification<O, T> implements Specification<O> {
+public class YunzhiSpecification<O> implements Specification<O> {
     private final static Logger logger = LoggerFactory.getLogger(YunzhiSpecification.class);
+    private static final long serialVersionUID = 3132543250940999651L;
     private Predicate predicate = null;
     private CriteriaBuilder criteriaBuilder;
-    private YunzhiEntity<T> entity;       // 实体
+    private final YunzhiEntity entity;       // 实体
 
-    public YunzhiSpecification(YunzhiEntity entity) {
+    public YunzhiSpecification(final YunzhiEntity entity) {
         this.entity = entity;
     }
 
     /**
      * 设置and谓语.注意，这里只能设置and关系的谓语，如果谓语为OR，则需要手动设置
+     *
      * @param predicate 查询谓语
      */
-    private void andPredicate(Predicate predicate) {
+    private void andPredicate(final Predicate predicate) {
         if (null != predicate) {
             if (null == this.predicate) {
                 this.predicate = predicate;
@@ -45,27 +48,35 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
         }
     }
 
-    private void generatePredicate(Object entity, From<O, ?> root) {
+    private void generatePredicate(final Object entity, final From<O, ?> root) {
+        if (entity instanceof YunzhiEntity) {
+            logger.debug("继承了YunzhiEntity实体，则先判断是否传入了ID。传入ID，则直接对ID及deleted字段进行查询");
+            final YunzhiEntity yunzhiEntity = (YunzhiEntity) entity;
+            if (yunzhiEntity.getId() != null) {
+                this.andPredicate(this.criteriaBuilder.equal(root.get("id"), yunzhiEntity.getId()));
+                if (yunzhiEntity.getDeleted() != null) {
+                    this.andPredicate(this.criteriaBuilder.equal(root.get("deleted"), yunzhiEntity.getDeleted()));
+                }
+
+                return;
+            }
+        }
+
         logger.debug("反射字段，按字段类型，进行综合查询");
-        Field[] fields = entity.getClass().getDeclaredFields();
+        final List<Field> fields = CommonService.getAllModelFields(entity.getClass());
         try {
-            for (Field field : fields) {
+            for (final Field field : fields) {
                 logger.debug("设置字段可见，并获取实体值");
                 field.setAccessible(true);
-                Object value = field.get(entity);
+                final Object value = field.get(entity);
 
                 if (value != null) {
-                    if (Modifier.isFinal(field.getModifiers())) {
-                        logger.debug("字段类型为final");
+                    logger.debug("检测final或static字段");
+                    if (YunzhiSpecification.checkFinalOrStatic(field)) {
                         continue;
                     }
 
-                    if (Modifier.isStatic(field.getModifiers())) {
-                        logger.debug("字段类型为static");
-                        continue;
-                    }
-
-                    String name = field.getName();
+                    final String name = field.getName();
                     if (name.equals("serialVersionUID")) {
                         logger.debug("字段名为serialVersionUID");
                         continue;
@@ -89,36 +100,36 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
                     // 按字段类型进行查询
                     if (value instanceof Boolean) {
                         logger.debug("布尔值");
-                        Boolean booleanValue = ((Boolean) value);
-                        this.andPredicate(criteriaBuilder.equal(root.get(name).as(Boolean.class), booleanValue));
+                        final Boolean booleanValue = ((Boolean) value);
+                        this.andPredicate(this.criteriaBuilder.equal(root.get(name).as(Boolean.class), booleanValue));
                     } else if (value instanceof String) {
                         logger.debug("字符串则进行模糊查询");
-                        String stringValue = ((String) value);
+                        final String stringValue = ((String) value);
                         if (!stringValue.isEmpty()) {
-                            this.andPredicate(criteriaBuilder.like(root.get(name).as(String.class), "%" + stringValue + "%"));
+                            this.andPredicate(this.criteriaBuilder.like(root.get(name).as(String.class), "%" + stringValue + "%"));
                         }
                     } else if (value instanceof Number || value instanceof Calendar || value instanceof Date) {
                         logger.debug("如果为number，则进行精确或范围查询");
-                        this.andPredicate(criteriaBuilder.equal(root.get(name).as(value.getClass()), value));
+                        this.andPredicate(this.criteriaBuilder.equal(root.get(name).as(value.getClass()), value));
                     } else if (value instanceof YunzhiEntity) {
                         logger.debug("是实体类");
-                        YunzhiEntity yunZhiEntity = (YunzhiEntity) value;
+                        final YunzhiEntity yunZhiEntity = (YunzhiEntity) value;
                         if (yunZhiEntity.getId() != null) {
                             logger.debug("对应的ManyToOne，加入了id, 则按ID查询");
-                            this.andPredicate(criteriaBuilder.equal(root.join(name).get("id"), yunZhiEntity.getId()));
+                            this.andPredicate(this.criteriaBuilder.equal(root.join(name).get("id"), yunZhiEntity.getId()));
                         } else {
                             logger.debug("未加入id, 则进行Join查询");
                             this.generatePredicate(value, root.join(name));
                         }
 
                     } else if (value instanceof Collection) {
-                        Collection<?> collectionValue = (Collection<?>) value;
+                        final Collection<?> collectionValue = (Collection<?>) value;
                         if (collectionValue.size() > 0) {
                             logger.warn("暂不支持一对多，多对多查询");
                             // todo: 一对多，多对多查询
                         }
                     } else {
-                        Class<?> clazz = value.getClass();
+                        final Class<?> clazz = value.getClass();
                         if (clazz.isAnnotationPresent(Embeddable.class)) {
                             logger.debug("为内部Embeddable");
                             this.generatePredicate(value, root.join(name));
@@ -128,24 +139,38 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static boolean checkFinalOrStatic(final Field field) {
+        if (Modifier.isFinal(field.getModifiers())) {
+            logger.debug("字段类型为final");
+            return true;
+        }
+
+        if (Modifier.isStatic(field.getModifiers())) {
+            logger.debug("字段类型为static");
+            return true;
+        }
+        return false;
+    }
+
     /**
      * in 查询
-     * @param root 根查询实体
+     *
+     * @param root  根查询实体
      * @param field 字段
      * @param value 值
      * @return 进行了in直询，true;未进行in查询,false.
      */
-    private Boolean inQuery(From<O, ?> root, Field field, Object value) {
+    private Boolean inQuery(final From<O, ?> root, final Field field, final Object value) {
         // 获取in注解
-        In inQueryParam = field.getAnnotation(In.class);
+        final In inQueryParam = field.getAnnotation(In.class);
         if (inQueryParam != null) {
             logger.debug("存在@InQueryParam注解");
-            String inQueryName = inQueryParam.name();
+            final String inQueryName = inQueryParam.name();
             /*
              * In查询相关代码
              * https://blog.csdn.net/jiangyu1013/article/details/79056231
@@ -154,10 +179,10 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
              */
             logger.debug("执行In查询");
             try {
-                Collection<?> collectionValue = (Collection<?>) value;
-                Expression<Object> expression = root.get(inQueryName);
+                final Collection<?> collectionValue = (Collection<?>) value;
+                final Expression<Object> expression = root.get(inQueryName);
                 this.andPredicate(expression.in(collectionValue));
-            } catch (ClassCastException e) {
+            } catch (final ClassCastException e) {
                 String message = "将对象转换为Collention时发生错误。注意：in查询只能做用到Collention中";
                 if (value != null) {
                     message += "->" + value.getClass().getName();
@@ -171,20 +196,20 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
 
     /**
      * 范围查询 查询大于等于或是小于等于
-     * @param root 基实体
+     *
+     * @param root  基实体
      * @param value 值
      * @param field 字段
      * @return Boolean 是否执行了范围查询
-     *
      */
-    private Boolean beginOrEndQuery(From<O, ?> root, Object value, Field field) {
+    private Boolean beginOrEndQuery(final From<O, ?> root, final Object value, final Field field) {
         String name = field.getName();
         // 初始化两个界限的变量
         Boolean isBegin = false;
         Boolean isEnd = false;
 
         // 查找开始与结束的注解
-        GreaterThanOrEqualTo beginQueryParam = field.getAnnotation(GreaterThanOrEqualTo.class);
+        final GreaterThanOrEqualTo beginQueryParam = field.getAnnotation(GreaterThanOrEqualTo.class);
         if (beginQueryParam != null) {
             logger.debug("存在@BeginQueryParam注解, 进行大于等于查询");
             isBegin = true;
@@ -199,50 +224,50 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
             if (value instanceof Number) {
                 logger.debug("传入类型为number");
                 if (value instanceof Byte) {
-                    Byte byteValue = (Byte) value;
+                    final Byte byteValue = (Byte) value;
                     if (isBegin) {
-                        this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Byte.class), byteValue));
+                        this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Byte.class), byteValue));
                     } else {
-                        this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Byte.class), byteValue));
+                        this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Byte.class), byteValue));
                     }
                 } else if (value instanceof Short) {
-                    Short shortValue = (Short) value;
+                    final Short shortValue = (Short) value;
                     if (isBegin) {
-                        this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Short.class), shortValue));
+                        this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Short.class), shortValue));
                     } else {
-                        this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Short.class), shortValue));
+                        this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Short.class), shortValue));
                     }
                 } else if (value instanceof Integer) {
-                    Integer integerValue = (Integer) value;
+                    final Integer integerValue = (Integer) value;
                     if (isBegin) {
-                        this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Integer.class), integerValue));
+                        this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Integer.class), integerValue));
                     } else {
-                        this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Integer.class), integerValue));
+                        this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Integer.class), integerValue));
                     }
                 } else if (value instanceof Long) {
-                    Long longValue = (Long) value;
+                    final Long longValue = (Long) value;
                     if (isBegin) {
-                        this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Long.class), longValue));
+                        this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Long.class), longValue));
                     } else {
-                        this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Long.class), longValue));
+                        this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Long.class), longValue));
                     }
                 } else {
                     logger.error("大于等于、小于等于中的Number类型，暂时只支持到Byte, Short,Integer,Long");
                 }
             } else if (value instanceof Calendar) {
-                Calendar calendarValue = (Calendar) value;
+                final Calendar calendarValue = (Calendar) value;
                 if (isBegin) {
-                    this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
+                    this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
                 } else {
-                    this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
+                    this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
                 }
             } else if (value instanceof Date) {
                 logger.debug("Sql.Date类型");
-                Date dateValue = (Date) value;
+                final Date dateValue = (Date) value;
                 if (isBegin) {
-                    this.andPredicate(criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Date.class), dateValue));
+                    this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Date.class), dateValue));
                 } else {
-                    this.andPredicate(criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Date.class), dateValue));
+                    this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Date.class), dateValue));
                 }
             }
         }
@@ -251,7 +276,7 @@ public class YunzhiSpecification<O, T> implements Specification<O> {
     }
 
     @Override
-    public Predicate toPredicate(Root<O> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(final Root<O> root, final CriteriaQuery<?> criteriaQuery, final CriteriaBuilder criteriaBuilder) {
         // 设置CriteriaBuilder，用于合并谓语
         this.criteriaBuilder = criteriaBuilder;
         this.generatePredicate(this.entity, root);
