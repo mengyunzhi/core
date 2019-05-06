@@ -23,6 +23,7 @@ before_install:
 
 # 脚本
 script:
+  - mvn clean install
   - cd test
   - mvn test
 
