@@ -14,7 +14,7 @@ import java.util.Optional;
  * 加入软删除
  */
 @NoRepositoryBean
-public interface YunzhiRepository<T, ID extends Serializable> extends CrudRepository<T, ID>, JpaSpecificationExecutor {
+public interface SoftRepository<T, ID extends Serializable> extends CrudRepository<T, ID>, JpaSpecificationExecutor {
     @Override
     @Transactional
     @Query("select e from #{#entityName} e where e.id = ?1 and e.deleted = false")
