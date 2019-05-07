@@ -46,3 +46,8 @@ public interface KlassRepository extends CrudRepository<Klass, Long>, JpaSpecifi
 }
 ----
 
+
+== 开发选项
+1. 将注释掉的子TEST模块启用
+2. 将签名的插件注释掉。
+
