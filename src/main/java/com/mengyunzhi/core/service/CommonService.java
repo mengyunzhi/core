@@ -205,7 +205,7 @@ public interface CommonService {
     /**
      * 获取一个随机的唯一的ID
      * 注意：该方法只能在单元测试中使用
-     *
+     * @param begin 最小值（不大于20000）
      * @return 随机数
      */
     static Long getRandomUniqueId(Long begin) {
@@ -215,7 +215,8 @@ public interface CommonService {
     /**
      * 获取一个随机的唯一的ID
      * 注意：该方法只能在单元测试中使用
-     *
+     * @param begin 最小值
+     * @param end 最大值
      * @return 随机ID
      */
     static Long getRandomUniqueId(Long begin, Long end) {
