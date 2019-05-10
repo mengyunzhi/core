@@ -19,10 +19,6 @@
         </license>
     </licenses>
 
-    <!--声明子模块 开发环境将注释的内容启用-->
-    <packaging>pom</packaging>
-    <!--推送官方仓库时，将声明子模块代码注释掉，防止推送-->
-
     <developers>
         <developer>
             <name>panjie</name>
@@ -31,25 +27,6 @@
             <timezone>+8</timezone>
         </developer>
     </developers>
-
-    <scm>
-        <connection>scm:git:https://github.com/mengyunzhi/core.git</connection>
-        <developerConnection>scm:git:https://github.com/mengyunzhi/core.git</developerConnection>
-        <url>https://github.com/mengyunzhi/core</url>
-        <tag>v${project.version}</tag>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>oss</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>oss</id>
-            <name>Maven Central Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
