@@ -40,6 +40,7 @@ public class LogHttpAppender<E> extends LogglyAppender<E> {
         final Calendar calendar = Calendar.getInstance();
         if (events.size() >= 100 || (calendar.getTimeInMillis() - lastSendTime.getTimeInMillis() >= 6000)) {
             try {
+                lastSendTime = calendar;
                 final List<String> sendEvents = events;
                 events = new ArrayList<>();
 
@@ -67,8 +68,6 @@ public class LogHttpAppender<E> extends LogglyAppender<E> {
                 e.printStackTrace();
             }
         }
-
-        lastSendTime = calendar;
     }
 
     /**
