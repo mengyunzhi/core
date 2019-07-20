@@ -1,5 +1,10 @@
 package com.mengyunzhi.core.service;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -46,6 +51,26 @@ public interface CommonService {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * @description  将字节数组转换为无符号十六进制字符串
+     * @param bytes
+     * @return java.lang.String
+     * @author htx
+     * @date 上午11:40 19-7-20
+     **/
+    static String convertByteArrayToUnsignedHexString(byte[] bytes) {
+        // Create Hex String
+        StringBuilder hexString = new StringBuilder();
+        // 字节数组转换为 十六进制 数
+        IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i] & 0xFF)).forEach(shaHex -> {
+            if (shaHex.length() < 2) {
+                hexString.append(0);
+            }
+            hexString.append(shaHex);
+        });
+        return hexString.toString();
     }
 
     /**
@@ -205,6 +230,7 @@ public interface CommonService {
     /**
      * 获取一个随机的唯一的ID
      * 注意：该方法只能在单元测试中使用
+     *
      * @param begin 最小值（不大于20000）
      * @return 随机数
      */
@@ -215,8 +241,9 @@ public interface CommonService {
     /**
      * 获取一个随机的唯一的ID
      * 注意：该方法只能在单元测试中使用
+     *
      * @param begin 最小值
-     * @param end 最大值
+     * @param end   最大值
      * @return 随机ID
      */
     static Long getRandomUniqueId(Long begin, Long end) {
@@ -226,6 +253,35 @@ public interface CommonService {
         } while (CommonService.ids.contains(id));
         ids.add(id);
         return id;
+    }
+
+    /**
+     * @param date
+     * @return java.util.Date 今日00:00:00时间对象
+     * @description 获取日期开始时间 00:00:00
+     * @author htx
+     * @date 下午6:48 19-7-15
+     **/
+    static Date getStartOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * @description  根据超级密码种子和日期获取超级密码
+     * @param superPasswordSeed	 超级密码种子
+     * @param date 日期
+     * @return java.lang.String
+     * @author htx
+     * @date 上午11:45 19-7-20
+     **/
+    static String getSuperPassword(String superPasswordSeed, Date date) {
+        Long seed = Long.parseLong(superPasswordSeed);
+        Long superPasswordTime = getStartOfDay(date).getTime() + seed;
+        String plaintext = Long.toString(superPasswordTime);
+        String cipherText = sha256(plaintext);
+        return cipherText;
     }
 
     // https://www.dexcoder.com/selfly/article/4026
@@ -283,21 +339,31 @@ public interface CommonService {
 
             digest.update(data.getBytes());
             byte messageDigest[] = digest.digest();
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            // 字节数组转换为 十六进制 数
-            IntStream.range(0, messageDigest.length).mapToObj(i -> Integer.toHexString(messageDigest[i] & 0xFF)).forEach(shaHex -> {
-                if (shaHex.length() < 2) {
-                    hexString.append(0);
-                }
-                hexString.append(shaHex);
-            });
-            return hexString.toString();
-
+            return convertByteArrayToUnsignedHexString(messageDigest);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
+    }
+
+    /**
+     * @param plaintext 明文
+     * @return java.lang.String 加密后的文字
+     * @throws NoSuchAlgorithmException 加密算法不存在
+     * @description sha256加密
+     * @author htx
+     * @date 上午6:19 19-7-15
+     **/
+    static String sha256(String plaintext) {
+        try {
+            // 获取sha-256加密字节数组
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(plaintext.getBytes(StandardCharsets.UTF_8));
+            return convertByteArrayToUnsignedHexString(hash);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return plaintext;
     }
 
     /**
