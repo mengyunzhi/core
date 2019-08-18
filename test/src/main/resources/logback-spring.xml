@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--开启debug模式-->
+<configuration debug="true">
+    <!--引入application配置信息-->
+    <springProperty scope="context" name="monitorUrl" source="yunzhi.monitor.url"
+                    defaultValue="localhost"/>
+
+    <!--引用第三方appender, 起名为batchHttp-->
+    <appender name="batchHttp" class="com.mengyunzhi.core.appender.LogHttpAppender">
+        <endpointUrl>${monitorUrl}</endpointUrl>
+        <!--定义输出格式JSON-->
+        <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+            <jsonFormatter
+                    class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+            </jsonFormatter>
+        </layout>
+    </appender>
+
+
+    <root level="info">
+        <appender-ref ref="batchHttp"/>
+    </root>
+
+</configuration>
