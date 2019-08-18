@@ -1,6 +1,6 @@
-package com.mengyunzhi.core.test.service;
+package com.mengyunzhi.core.demo.service;
 
-import com.mengyunzhi.core.test.entity.Klass;
+import com.mengyunzhi.core.demo.entity.Klass;
 
 /**
  * @author panjie

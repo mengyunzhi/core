@@ -1,6 +1,6 @@
-package com.mengyunzhi.core.test.repository;
+package com.mengyunzhi.core.demo.repository;
 
-import com.mengyunzhi.core.test.entity.Klass;
+import com.mengyunzhi.core.demo.entity.Klass;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 

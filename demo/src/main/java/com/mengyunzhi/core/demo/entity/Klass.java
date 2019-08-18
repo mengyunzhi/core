@@ -1,4 +1,4 @@
-package com.mengyunzhi.core.test.entity;
+package com.mengyunzhi.core.demo.entity;
 
 import com.mengyunzhi.core.annotation.query.Ignore;
 import com.mengyunzhi.core.entity.YunzhiEntity;

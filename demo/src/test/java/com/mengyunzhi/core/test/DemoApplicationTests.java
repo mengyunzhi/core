@@ -1,17 +1,18 @@
 package com.mengyunzhi.core.test;
 
+import com.mengyunzhi.core.demo.DemoApplication;
 import com.mengyunzhi.core.service.CommonService;
 import com.mengyunzhi.core.service.YunzhiService;
 import com.mengyunzhi.core.service.YunzhiServiceImpl;
-import com.mengyunzhi.core.test.entity.Address;
-import com.mengyunzhi.core.test.entity.Klass;
-import com.mengyunzhi.core.test.entity.Student;
-import com.mengyunzhi.core.test.entity.Teacher;
-import com.mengyunzhi.core.test.repository.KlassRepository;
-import com.mengyunzhi.core.test.repository.StudentRepository;
-import com.mengyunzhi.core.test.service.AddressService;
-import com.mengyunzhi.core.test.service.KlassService;
-import com.mengyunzhi.core.test.service.TeacherService;
+import com.mengyunzhi.core.demo.entity.Address;
+import com.mengyunzhi.core.demo.entity.Klass;
+import com.mengyunzhi.core.demo.entity.Student;
+import com.mengyunzhi.core.demo.entity.Teacher;
+import com.mengyunzhi.core.demo.repository.KlassRepository;
+import com.mengyunzhi.core.demo.repository.StudentRepository;
+import com.mengyunzhi.core.demo.service.AddressService;
+import com.mengyunzhi.core.demo.service.KlassService;
+import com.mengyunzhi.core.demo.service.TeacherService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,10 +30,10 @@ import java.util.List;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = DemoApplication.class)
 @Transactional
-public class TestApplicationTests {
-    private final static Logger logger = LoggerFactory.getLogger(TestApplicationTests.class);
+public class DemoApplicationTests {
+    private final static Logger logger = LoggerFactory.getLogger(DemoApplicationTests.class);
     @Autowired
     KlassService klassService;
     @Autowired
@@ -47,7 +48,7 @@ public class TestApplicationTests {
     YunzhiService yunzhiService;
 
 
-    public TestApplicationTests() {
+    public DemoApplicationTests() {
         this.yunzhiService = new YunzhiServiceImpl<Klass>();
     }
 
@@ -57,7 +58,7 @@ public class TestApplicationTests {
         final Klass originKlass = this.klassService.getOneSavedKlass();
         final PageRequest pageRequest = PageRequest.of(0, 2);
 
-        Klass klass = TestApplicationTests.initQueryKlass();
+        Klass klass = DemoApplicationTests.initQueryKlass();
         Page klassPage = this.yunzhiService.page(this.klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
@@ -92,7 +93,7 @@ public class TestApplicationTests {
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("测试关联实体");
-        klass = TestApplicationTests.initQueryKlass();
+        klass = DemoApplicationTests.initQueryKlass();
         klass.setTeacher(originKlass.getTeacher());
         klassPage = this.yunzhiService.page(this.klassRepository, klass, pageRequest);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
@@ -135,7 +136,7 @@ public class TestApplicationTests {
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(1);
 
         logger.info("测试@BeginQueryParam, @EndQueryParam注解在Calendar上在作用");
-        klass = TestApplicationTests.initQueryKlass();
+        klass = DemoApplicationTests.initQueryKlass();
         teacher = new Teacher();
         klass.setTeacher(teacher);
         final Calendar beginCalendar = Calendar.getInstance();
@@ -178,7 +179,7 @@ public class TestApplicationTests {
         logger.info("上面的分页，已经将该测试的测试完了，这里只是做做样子，防止语法错语");
         final Klass originKlass = this.klassService.getOneSavedKlass();
 
-        final Klass klass = TestApplicationTests.initQueryKlass();
+        final Klass klass = DemoApplicationTests.initQueryKlass();
         List<Klass> klassPage = this.yunzhiService.findAll(this.klassRepository, klass);
         Assertions.assertThat(klassPage.size()).isEqualTo(1);
 
