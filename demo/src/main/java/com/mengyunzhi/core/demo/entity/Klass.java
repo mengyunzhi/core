@@ -1,5 +1,6 @@
 package com.mengyunzhi.core.demo.entity;
 
+import com.mengyunzhi.core.annotation.query.EqualTo;
 import com.mengyunzhi.core.annotation.query.Ignore;
 import com.mengyunzhi.core.entity.YunzhiEntity;
 
@@ -13,11 +14,20 @@ public class Klass implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean deleted = false;
+
     private String name;        // 班级名称
+
     private Short totalStudentCount;    // 学生总数
+
     private Integer integerTest;        // 整形测试
+
     private Long longTest;              // 长整形测试
 
+    @EqualTo
+    private String address;
+
+    @EqualTo("address")
+    private String queryAddress;
 
     @ManyToOne
     private Teacher teacher;
@@ -77,6 +87,22 @@ public class Klass implements YunzhiEntity<Long> {
 
     public Teacher getIgnoreTeacher() {
         return ignoreTeacher;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getQueryAddress() {
+        return queryAddress;
+    }
+
+    public void setQueryAddress(String queryAddress) {
+        this.queryAddress = queryAddress;
     }
 
     @Override

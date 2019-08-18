@@ -1,9 +1,6 @@
 package com.mengyunzhi.core.service;
 
-import com.mengyunzhi.core.annotation.query.GreaterThanOrEqualTo;
-import com.mengyunzhi.core.annotation.query.Ignore;
-import com.mengyunzhi.core.annotation.query.In;
-import com.mengyunzhi.core.annotation.query.LessThanOrEqualTo;
+import com.mengyunzhi.core.annotation.query.*;
 import com.mengyunzhi.core.entity.YunzhiEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,6 +94,11 @@ public class YunzhiSpecification<O> implements Specification<O> {
                         continue;
                     }
 
+                    if (this.equalTo(root, field, value)) {
+                        logger.debug("执行了equal to 注解查询");
+                        continue;
+                    }
+
                     // 按字段类型进行查询
                     if (value instanceof Boolean) {
                         logger.debug("布尔值");
@@ -142,6 +144,32 @@ public class YunzhiSpecification<O> implements Specification<O> {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 完全等于注解，主要用于一些需要进行精确查询的字符串类型
+     * @param root 查询根
+     * @param field 字段
+     * @param value 值
+     * @return
+     */
+    private boolean equalTo(From<O, ?> root, Field field, Object value) {
+        // 查找开始与结束的注解
+        final EqualTo beginQueryParam = field.getAnnotation(EqualTo.class);
+        boolean result = false;
+
+        // 有注解，且值不为null，也不为 空 时，进行查询
+        if (beginQueryParam != null && value != null && !"".equals(value)) {
+            result = true;
+            String name = beginQueryParam.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+
+            this.andPredicate(this.criteriaBuilder.equal(root.get(name), value));
+        }
+
+        return result;
     }
 
     private static boolean checkFinalOrStatic(final Field field) {

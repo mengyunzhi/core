@@ -34,6 +34,7 @@ public class KlassServiceImpl implements KlassService {
         klass.setIntegerTest(100);
         klass.setTeacher(teacher);
         klass.setIgnoreTeacher(teacher);
+        klass.setAddress(CommonService.getRandomStringByLength(4) + "测试地址");
         klassRepository.save(klass);
         return klass;
     }

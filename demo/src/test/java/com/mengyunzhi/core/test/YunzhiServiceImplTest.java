@@ -20,8 +20,11 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DemoApplication.class)
 public class YunzhiServiceImplTest {
-    @Autowired private KlassService klassService;
-    @Autowired private KlassRepository klassRepository;
+    @Autowired
+    private KlassService klassService;
+    @Autowired
+    private KlassRepository klassRepository;
+
     @Test
     public void test() {
         YunzhiService<Klass> yunzhiService = new YunzhiServiceImpl();
@@ -58,6 +61,37 @@ public class YunzhiServiceImplTest {
 
         // 结束时间大于当前时间
         teacher.setEndCreateTimestamp(new Timestamp(timestamp.getTime() + 1));
+        klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
+    }
+
+    @Test
+    public void equalTo() {
+        YunzhiService<Klass> yunzhiService = new YunzhiServiceImpl();
+        long count = klassRepository.count();
+
+        Klass originKlass = klassService.getOneSavedKlass();
+
+        Klass klass = new Klass();
+        klass.setAllFieldsToNull();
+
+        // 名称少一个字符，进行精确查询，未找到
+        klass.setAddress(originKlass.getAddress().substring(0, originKlass.getAddress().length() - 2));
+        List<Klass> klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count);
+
+        // 查询名称与实体存的相同，进行精确查询，能找到
+        klass.setAddress(originKlass.getAddress());
+        klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
+
+        // 设置另一个注解的字段
+        klass.setQueryAddress(originKlass.getAddress().substring(0, originKlass.getAddress().length() - 2));
+        klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count);
+
+        // 查询名称与实体存的相同，进行精确查询，能找到
+        klass.setQueryAddress(originKlass.getAddress());
         klassPage = yunzhiService.findAll(klassRepository, klass);
         Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
     }
