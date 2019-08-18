@@ -47,8 +47,9 @@ IsNotNull | 不为null
 
 # 起动环境
 1. `mvn clean install`
-2. 维护功能。
-3. 在`test`子模块建立测试模块，并写单元测试。
+2. 找到`pom.xml`，去除相关注释，维护功能。
+3. 在`demo`子模块建立测试模块，并写单元测试。
+4. 发布后，找到`pom.xml`加入相关的注释.
 
 # 版本发布
 https://segmentfault.com/n/1330000015884709
