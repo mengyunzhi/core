@@ -13,9 +13,9 @@ import javax.persistence.Embeddable;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**

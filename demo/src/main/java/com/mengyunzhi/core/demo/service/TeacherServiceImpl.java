@@ -1,9 +1,9 @@
-package com.mengyunzhi.core.test.service;
+package com.mengyunzhi.core.demo.service;
 
+import com.mengyunzhi.core.demo.repository.TeacherRepository;
 import com.mengyunzhi.core.service.CommonService;
-import com.mengyunzhi.core.test.entity.Address;
-import com.mengyunzhi.core.test.entity.Teacher;
-import com.mengyunzhi.core.test.repository.TeacherRepository;
+import com.mengyunzhi.core.demo.entity.Address;
+import com.mengyunzhi.core.demo.entity.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

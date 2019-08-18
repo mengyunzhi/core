@@ -1,9 +1,11 @@
 package com.mengyunzhi.core.test;
 
+import com.mengyunzhi.core.demo.DemoApplication;
+import com.mengyunzhi.core.demo.entity.Teacher;
 import com.mengyunzhi.core.service.YunzhiSpecification;
-import com.mengyunzhi.core.test.entity.Klass;
-import com.mengyunzhi.core.test.repository.KlassRepository;
-import com.mengyunzhi.core.test.service.KlassService;
+import com.mengyunzhi.core.demo.entity.Klass;
+import com.mengyunzhi.core.demo.repository.KlassRepository;
+import com.mengyunzhi.core.demo.service.KlassService;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,23 +18,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.sql.Timestamp;
 
 /**
  * 使用生成的Specification，再加入其它条件进行查询。
  * 使用情景：
  * 1. 用户需要3个查询条件进行查询。比如：名称（模糊查询），班级ID（精确查询），专业LIST（IN 查询）
  * 2. YunzhiService只支持名称、班级ID查询，不支持IN查询。
- *
+ * <p>
  * 使用步骤：
  * 1. 实现原生的 Specification
  * 2. 将名称（模糊查询），班级ID（精确查询）加入查询条件
  * 3. 调用yunzhiSpecification.toPredicate生成查询条件
  * 4. 加入IN查询条件
  * 5. 返回供综合查询
+ *
  * @author panjie
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = DemoApplication.class)
 @Transactional
 public class YunzhiSpecificationTest {
     @Autowired
@@ -72,7 +76,8 @@ public class YunzhiSpecificationTest {
         specification = KlassSpecification.base(klass);
         klassPage = this.klassRepository.findAll(specification, pageable);
         Assertions.assertThat(klassPage.getTotalElements()).isEqualTo(0);
-    }
+
+       }
 
     // 班级综合查询
     public static class KlassSpecification {
@@ -80,6 +85,7 @@ public class YunzhiSpecificationTest {
         /**
          * 当YunzhiService中的查询方法不符合我们的实际需要时
          * 需要手动创建该方法，并调用以生成综合查询规范
+         *
          * @param klass 实体
          * @return
          */
