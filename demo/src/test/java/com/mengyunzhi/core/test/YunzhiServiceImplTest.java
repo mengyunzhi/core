@@ -95,4 +95,42 @@ public class YunzhiServiceImplTest {
         klassPage = yunzhiService.findAll(klassRepository, klass);
         Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
     }
+
+    @Test
+    public void isNullTest() {
+        YunzhiService<Klass> yunzhiService = new YunzhiServiceImpl();
+        long count = klassRepository.count();
+
+        klassService.getOneSavedKlass();
+
+        Klass klass = new Klass();
+        klass.setAllFieldsToNull();
+
+        // 名称少一个字符，进行精确查询，未找到
+        List<Klass> klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
+
+        klass.setLongTestIsNull(true);
+        klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count);
+    }
+
+    @Test
+    public void isNotNullTest() {
+        YunzhiService<Klass> yunzhiService = new YunzhiServiceImpl();
+        long count = klassRepository.count();
+
+        klassService.getOneSavedKlass();
+
+        Klass klass = new Klass();
+        klass.setAllFieldsToNull();
+
+        // 名称少一个字符，进行精确查询，未找到
+        List<Klass> klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count + 1);
+
+        klass.setNotNullFiled(true);
+        klassPage = yunzhiService.findAll(klassRepository, klass);
+        Assertions.assertThat(klassPage.size()).isEqualTo(count);
+    }
 }

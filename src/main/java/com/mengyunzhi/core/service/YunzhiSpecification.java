@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -99,6 +100,21 @@ public class YunzhiSpecification<O> implements Specification<O> {
                         continue;
                     }
 
+                    if (this.isNull(root, field, value)) {
+                        logger.debug("执行了isNull");
+                        continue;
+                    }
+
+                    if (this.isNotNull(root, field, value)) {
+                        logger.debug("执行了isNull");
+                        continue;
+                    }
+
+                    if (field.getAnnotation(Transient.class) != null) {
+                        logger.debug("该字段未持久化，跳过");
+                        continue;
+                    }
+
                     // 按字段类型进行查询
                     if (value instanceof Boolean) {
                         logger.debug("布尔值");
@@ -147,7 +163,48 @@ public class YunzhiSpecification<O> implements Specification<O> {
     }
 
     /**
+     * 不为null
+     * @param root
+     * @param field
+     * @param value
+     * @return
+     */
+    private boolean isNotNull(From<O, ?> root, Field field, Object value) {
+        final IsNotNull isNotNull  = field.getAnnotation(IsNotNull.class);
+        if (isNotNull != null && value != null && !value.equals(false)) {
+            String name = isNotNull.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+            this.andPredicate(this.criteriaBuilder.isNotNull(root.get(name)));
+        }
+
+        return isNotNull != null;
+    }
+
+    /**
+     * 为null
+     * @param root
+     * @param field
+     * @param value
+     * @return
+     */
+    private boolean isNull(From<O, ?> root, Field field, Object value) {
+        final IsNull isNull = field.getAnnotation(IsNull.class);
+        if (isNull != null && value != null && !value.equals(false)) {
+            String name = isNull.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+            this.andPredicate(this.criteriaBuilder.isNull(root.get(name)));
+        }
+
+        return isNull != null;
+    }
+
+    /**
      * 完全等于注解，主要用于一些需要进行精确查询的字符串类型
+     * 使用其注解了。
      * @param root 查询根
      * @param field 字段
      * @param value 值

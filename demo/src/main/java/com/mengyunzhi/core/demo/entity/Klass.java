@@ -2,7 +2,10 @@ package com.mengyunzhi.core.demo.entity;
 
 import com.mengyunzhi.core.annotation.query.EqualTo;
 import com.mengyunzhi.core.annotation.query.Ignore;
+import com.mengyunzhi.core.annotation.query.IsNotNull;
+import com.mengyunzhi.core.annotation.query.IsNull;
 import com.mengyunzhi.core.entity.YunzhiEntity;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 
@@ -26,7 +29,10 @@ public class Klass implements YunzhiEntity<Long> {
     @EqualTo
     private String address;
 
-    @EqualTo("address")
+    private String nullField;       // 空字段
+
+    @EqualTo(name = "address")
+    @Transient
     private String queryAddress;
 
     @ManyToOne
@@ -35,6 +41,14 @@ public class Klass implements YunzhiEntity<Long> {
     @ManyToOne
     @Ignore           // 忽略查询条件
     private Teacher ignoreTeacher;
+
+    @IsNull(name = "longTest")
+    @Transient
+    private Boolean longTestIsNull;
+
+    @IsNotNull(name = "nullField")
+    @Transient
+    private Boolean notNullFiled;
 
     @Override
     public Boolean getDeleted() {
@@ -103,6 +117,30 @@ public class Klass implements YunzhiEntity<Long> {
 
     public void setQueryAddress(String queryAddress) {
         this.queryAddress = queryAddress;
+    }
+
+    public Boolean getLongTestIsNull() {
+        return longTestIsNull;
+    }
+
+    public void setLongTestIsNull(Boolean longTestIsNull) {
+        this.longTestIsNull = longTestIsNull;
+    }
+
+    public String getNullField() {
+        return nullField;
+    }
+
+    public void setNullField(String nullField) {
+        this.nullField = nullField;
+    }
+
+    public Boolean getNotNullFiled() {
+        return notNullFiled;
+    }
+
+    public void setNotNullFiled(Boolean notNullFiled) {
+        this.notNullFiled = notNullFiled;
     }
 
     @Override
