@@ -164,13 +164,14 @@ public class YunzhiSpecification<O> implements Specification<O> {
 
     /**
      * 不为null
-     * @param root
-     * @param field
-     * @param value
-     * @return
+     *
+     * @param root  根查询
+     * @param field 字段
+     * @param value 值
+     * @return boolean 发现注解true
      */
     private boolean isNotNull(From<O, ?> root, Field field, Object value) {
-        final IsNotNull isNotNull  = field.getAnnotation(IsNotNull.class);
+        final IsNotNull isNotNull = field.getAnnotation(IsNotNull.class);
         if (isNotNull != null && value != null && !value.equals(false)) {
             String name = isNotNull.name();
             if ("".equals(name)) {
@@ -184,10 +185,11 @@ public class YunzhiSpecification<O> implements Specification<O> {
 
     /**
      * 为null
-     * @param root
-     * @param field
-     * @param value
-     * @return
+     *
+     * @param root  根查询
+     * @param field 字段
+     * @param value 值
+     * @return boolean 发现注解true
      */
     private boolean isNull(From<O, ?> root, Field field, Object value) {
         final IsNull isNull = field.getAnnotation(IsNull.class);
@@ -205,19 +207,18 @@ public class YunzhiSpecification<O> implements Specification<O> {
     /**
      * 完全等于注解，主要用于一些需要进行精确查询的字符串类型
      * 使用其注解了。
-     * @param root 查询根
+     *
+     * @param root  查询根
      * @param field 字段
      * @param value 值
-     * @return
+     * @return boolean 发现注解true
      */
     private boolean equalTo(From<O, ?> root, Field field, Object value) {
         // 查找开始与结束的注解
         final EqualTo beginQueryParam = field.getAnnotation(EqualTo.class);
-        boolean result = false;
 
         // 有注解，且值不为null，也不为 空 时，进行查询
         if (beginQueryParam != null && value != null && !"".equals(value)) {
-            result = true;
             String name = beginQueryParam.name();
             if ("".equals(name)) {
                 name = field.getName();
@@ -226,7 +227,7 @@ public class YunzhiSpecification<O> implements Specification<O> {
             this.andPredicate(this.criteriaBuilder.equal(root.get(name), value));
         }
 
-        return result;
+        return beginQueryParam != null;
     }
 
     private static boolean checkFinalOrStatic(final Field field) {
