@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 /**
  * 当注解的字段值不为null且不为false时，生效
- *  @IsNull("targetFiled")
- *  private Boolean isNull = true;
+ * `@IsNull("targetFiled")`
+ * `private Boolean isNull = true;`
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

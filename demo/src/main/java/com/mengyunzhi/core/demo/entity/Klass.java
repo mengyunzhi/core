@@ -5,7 +5,6 @@ import com.mengyunzhi.core.annotation.query.Ignore;
 import com.mengyunzhi.core.annotation.query.IsNotNull;
 import com.mengyunzhi.core.annotation.query.IsNull;
 import com.mengyunzhi.core.entity.YunzhiEntity;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 

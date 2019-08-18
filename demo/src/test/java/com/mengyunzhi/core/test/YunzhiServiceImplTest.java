@@ -120,6 +120,7 @@ public class YunzhiServiceImplTest {
         YunzhiService<Klass> yunzhiService = new YunzhiServiceImpl();
         long count = klassRepository.count();
 
+
         klassService.getOneSavedKlass();
 
         Klass klass = new Klass();

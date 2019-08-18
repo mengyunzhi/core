@@ -339,7 +339,7 @@ public interface CommonService {
     /**
      * 获取一个随机的手机号
      *
-     * @return
+     * @return 随机字符串
      */
     static String getRandomMobileNumber() {
         return "138888" + getRandomUniqueId().toString();
@@ -348,8 +348,8 @@ public interface CommonService {
     /**
      * calendar 转换为日期
      *
-     * @param calendar
-     * @return
+     * @param calendar 日历
+     * @return 日期字符串
      */
     static String convertCalendarToDateString(Calendar calendar) {
         return convertCalendarToDateString(calendar, dataPattern);
@@ -359,8 +359,9 @@ public interface CommonService {
     /**
      * calendar 转换为日期字符串
      *
-     * @param calendar
-     * @return
+     * @param calendar    日历
+     * @param dataPattern 格式化
+     * @return 日期字符串
      */
     static String convertCalendarToDateString(Calendar calendar, String dataPattern) {
         if (calendar == null) {
@@ -374,12 +375,11 @@ public interface CommonService {
     }
 
     /**
+     * sha256加密
+     *
      * @param plaintext 明文
      * @return java.lang.String 加密后的文字
-     * @throws NoSuchAlgorithmException 加密算法不存在
-     * @description sha256加密
      * @author htx
-     * @date 上午6:19 19-7-15
      **/
     static String encryptSha256(String plaintext) {
         try {
@@ -401,11 +401,10 @@ public interface CommonService {
     }
 
     /**
-     * @param date
-     * @return java.util.Date
-     * @description 获取日期开始时间 00:00
-     * @author htx
-     * @date 下午6:48 19-7-15
+     * 获取日期开始时间 00:00
+     *
+     * @param date 日期
+     * @return java.util.Date 0点的日期
      **/
     static Date getStartOfDay(Date date) {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());

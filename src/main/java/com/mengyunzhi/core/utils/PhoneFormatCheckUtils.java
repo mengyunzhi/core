@@ -18,6 +18,9 @@ public interface PhoneFormatCheckUtils {
      * 17+3,5,6,7,8
      * 18+任意数
      * 198,199
+     *
+     * @param str 手机号
+     * @return 验证结果 是手机号true
      */
     static boolean isChinaPhoneLegal(String str) throws PatternSyntaxException {
         // ^ 匹配输入字符串开始的位置

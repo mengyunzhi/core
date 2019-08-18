@@ -173,6 +173,9 @@ public class CheckIdCardUtils {
 
     /**
      * 验证身份证是否合法
+     *
+     * @param idCard 身份证号
+     * @return boolean 合法true
      */
     public static boolean validateCard(String idCard) {
         String card = idCard.trim();
@@ -395,7 +398,7 @@ public class CheckIdCardUtils {
     /**
      * 将身份证的每位和对应位的加权因子相乘之后，再得到和值
      *
-     * @param iArr
+     * @param iArr 身份证号码前17位
      * @return 身份证编码。
      */
     public static int getPowerSum(int[] iArr) {
@@ -415,7 +418,7 @@ public class CheckIdCardUtils {
     /**
      * 将power和值与11取模获得余数进行校验码判断
      *
-     * @param iSum
+     * @param iSum 校验位
      * @return 校验位
      */
     public static String getCheckCode18(int iSum) {
@@ -580,7 +583,7 @@ public class CheckIdCardUtils {
     /**
      * 数字验证
      *
-     * @param val
+     * @param val 字符串
      * @return 提取的数字。
      */
     public static boolean isNum(String val) {

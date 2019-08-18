@@ -8,9 +8,9 @@ public class DateUtils {
      * 时间戳转Calendar
      *
      * @param timestamp 时间戳
-     * @return Calendar
+     * @return Calendar 日历
      */
-    public static  Calendar timestampToCalendar(Timestamp timestamp) {
+    public static Calendar timestampToCalendar(Timestamp timestamp) {
         if (timestamp != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(timestamp.getTime());
@@ -23,8 +23,8 @@ public class DateUtils {
     /**
      * 日历转时间戳
      *
-     * @param calendar
-     * @return
+     * @param calendar 日历
+     * @return 时间戳
      */
     public static Timestamp calendarToTimestamp(Calendar calendar) {
         if (calendar != null) {
