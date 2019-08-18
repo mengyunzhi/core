@@ -1,7 +1,6 @@
-package com.mengyunzhi.core.test.entity;
+package com.mengyunzhi.core.demo.entity;
 
 import com.mengyunzhi.core.entity.YunzhiEntity;
-import com.mengyunzhi.core.service.CommonService;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -67,11 +66,10 @@ public class Address implements YunzhiEntity<Long> {
     }
 
     @Override
-    public Address setAllFieldsToNull() {
+    public void setAllFieldsToNull() {
         this.id = null;
         this.city = null;
         this.county = null;
         this.num = null;
-        return this;
     }
 }

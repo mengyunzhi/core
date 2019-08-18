@@ -1,7 +1,7 @@
-package com.mengyunzhi.core.test.repository;
+package com.mengyunzhi.core.demo.repository;
 
 
-import com.mengyunzhi.core.test.entity.Address;
+import com.mengyunzhi.core.demo.entity.Address;
 import org.springframework.data.repository.CrudRepository;
 
 /**
