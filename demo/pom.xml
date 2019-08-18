@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
+        <version>2.1.7.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.mengyunzhi.core</groupId>
-    <artifactId>test</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>test</name>
+    <artifactId>demo</artifactId>
+    <version>2.1.7.0.RELEASE</version>
+    <name>demo</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.mengyunzhi</groupId>
             <artifactId>core</artifactId>
-            <version>2.0.5.1</version>
+            <version>2.1.7.0</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
