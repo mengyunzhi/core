@@ -1,6 +1,8 @@
 package com.mengyunzhi.core.service;
 
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -27,6 +29,15 @@ import java.util.stream.IntStream;
  */
 public interface CommonService {
     Logger logger = LoggerFactory.getLogger(CommonService.class);
+
+    /**
+     * 字符串格式化
+     */
+    String dataPattern = "yyyy年M月d日";
+    /**
+     * 加密算法
+     */
+    String SHA_256 = "SHA-256";
     // 十六进制字符数组
     char[] HEXES = {
             '0', '1', '2', '3',
@@ -51,26 +62,6 @@ public interface CommonService {
         }
 
         return stringBuilder.toString();
-    }
-
-    /**
-     * @description  将字节数组转换为无符号十六进制字符串
-     * @param bytes
-     * @return java.lang.String
-     * @author htx
-     * @date 上午11:40 19-7-20
-     **/
-    static String convertByteArrayToUnsignedHexString(byte[] bytes) {
-        // Create Hex String
-        StringBuilder hexString = new StringBuilder();
-        // 字节数组转换为 十六进制 数
-        IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i] & 0xFF)).forEach(shaHex -> {
-            if (shaHex.length() < 2) {
-                hexString.append(0);
-            }
-            hexString.append(shaHex);
-        });
-        return hexString.toString();
     }
 
     /**
@@ -255,35 +246,6 @@ public interface CommonService {
         return id;
     }
 
-    /**
-     * @param date
-     * @return java.util.Date 今日00:00:00时间对象
-     * @description 获取日期开始时间 00:00:00
-     * @author htx
-     * @date 下午6:48 19-7-15
-     **/
-    static Date getStartOfDay(Date date) {
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
-        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
-        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    /**
-     * @description  根据超级密码种子和日期获取超级密码
-     * @param superPasswordSeed	 超级密码种子
-     * @param date 日期
-     * @return java.lang.String
-     * @author htx
-     * @date 上午11:45 19-7-20
-     **/
-    static String getSuperPassword(String superPasswordSeed, Date date) {
-        Long seed = Long.parseLong(superPasswordSeed);
-        Long superPasswordTime = getStartOfDay(date).getTime() + seed;
-        String plaintext = Long.toString(superPasswordTime);
-        String cipherText = sha256(plaintext);
-        return cipherText;
-    }
-
     // https://www.dexcoder.com/selfly/article/4026
     static String md5(String str) throws Exception {
         try {
@@ -339,31 +301,21 @@ public interface CommonService {
 
             digest.update(data.getBytes());
             byte messageDigest[] = digest.digest();
-            return convertByteArrayToUnsignedHexString(messageDigest);
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            // 字节数组转换为 十六进制 数
+            IntStream.range(0, messageDigest.length).mapToObj(i -> Integer.toHexString(messageDigest[i] & 0xFF)).forEach(shaHex -> {
+                if (shaHex.length() < 2) {
+                    hexString.append(0);
+                }
+                hexString.append(shaHex);
+            });
+            return hexString.toString();
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return "";
-    }
-
-    /**
-     * @param plaintext 明文
-     * @return java.lang.String 加密后的文字
-     * @throws NoSuchAlgorithmException 加密算法不存在
-     * @description sha256加密
-     * @author htx
-     * @date 上午6:19 19-7-15
-     **/
-    static String sha256(String plaintext) {
-        try {
-            // 获取sha-256加密字节数组
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(plaintext.getBytes(StandardCharsets.UTF_8));
-            return convertByteArrayToUnsignedHexString(hash);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return plaintext;
     }
 
     /**
@@ -382,5 +334,83 @@ public interface CommonService {
 
         return calendar;
     }
+
+
+    /**
+     * 获取一个随机的手机号
+     *
+     * @return 随机字符串
+     */
+    static String getRandomMobileNumber() {
+        return "138888" + getRandomUniqueId().toString();
+    }
+
+    /**
+     * calendar 转换为日期
+     *
+     * @param calendar 日历
+     * @return 日期字符串
+     */
+    static String convertCalendarToDateString(Calendar calendar) {
+        return convertCalendarToDateString(calendar, dataPattern);
+    }
+
+
+    /**
+     * calendar 转换为日期字符串
+     *
+     * @param calendar    日历
+     * @param dataPattern 格式化
+     * @return 日期字符串
+     */
+    static String convertCalendarToDateString(Calendar calendar, String dataPattern) {
+        if (calendar == null) {
+            return "";
+        } else {
+            Date date = calendar.getTime();
+            DateFormat dateFormat = new SimpleDateFormat(dataPattern);
+            String dateString = dateFormat.format(date);
+            return dateString;
+        }
+    }
+
+    /**
+     * sha256加密
+     *
+     * @param plaintext 明文
+     * @return java.lang.String 加密后的文字
+     * @author htx
+     **/
+    static String encryptSha256(String plaintext) {
+        try {
+            // 获取sha-256加密字节数组
+            MessageDigest digest = MessageDigest.getInstance(SHA_256);
+            byte[] hash = digest.digest(plaintext.getBytes(StandardCharsets.UTF_8));
+            StringBuffer hexString = new StringBuffer();
+            // 将字节数组化为无符号16进制字符串
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("未获取到" + SHA_256 + "算法", e);
+        }
+        return plaintext;
+    }
+
+    /**
+     * 获取日期开始时间 00:00
+     *
+     * @param date 日期
+     * @return java.util.Date 0点的日期
+     **/
+    static Date getStartOfDay(Date date) {
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
 
 }
