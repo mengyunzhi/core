@@ -348,7 +348,7 @@ public class YunzhiSpecification<O> implements Specification<O> {
                     this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
                 }
             } else if (value instanceof Date) {
-                logger.debug("Sql.Date类型");
+                logger.debug("java.util.date类型");
                 final Date dateValue = (Date) value;
                 if (isBegin) {
                     this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Date.class), dateValue));
