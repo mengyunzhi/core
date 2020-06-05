@@ -12,14 +12,14 @@
 ## 已验证版本
 spring-boot:2.0.5
 spring-boot:2.1.2
-
+spring-boot:2.1.7
 # 使用方法
 ## 添加依赖
 ```xml
         <dependency>
             <groupId>com.mengyunzhi</groupId>
             <artifactId>core</artifactId>
-            <version>3.0.1.RELEASE</version>
+            <version>2.1.7.RELEASE</version>
         </dependency>
 ```
 
@@ -38,19 +38,19 @@ GreaterThanOrEqualTo | 大于等于某个字段的值
 Ignore | 忽略查询注解的字段
 In | 某个字段在该数组中
 LessThanOrEqualTo | 小于等于某个字段的值
-
-## 前提
-1. 查询的实体，需要实现`YunzhiEntity<T>`接口，`T`传入实体ID类型.
-2. 建立继承`JpaSpecificationExecutor`的仓库。
+EqualTo | 完全等于
+IsNull | 为null
+IsNotNull | 不为null
 
 ## 示例代码
-详见`test`子模块。
+详见`demo`子模块。
 
 # 起动环境
 1. `mvn clean install`
-2. 维护功能。
-3. 在`test`子模块建立测试模块，并写单元测试。
+2. 找到`pom.xml`，去除相关注释，维护功能。
+3. 在`demo`子模块建立测试模块，并写单元测试。
+4. 发布后，找到`pom.xml`加入相关的注释.
 
 # 版本发布
-详见思否
+https://segmentfault.com/n/1330000015884709
 

@@ -115,4 +115,36 @@ public interface SoftRepository<T extends YunzhiEntity<ID>, ID extends Serializa
             this.softDelete(id);
         }
     }
+
+    /**
+     * 删除实体
+     *
+     * @param var1 实体
+     */
+    @Override
+    @Deprecated
+    default void delete(final T var1) {
+        throw new RuntimeException("请使用deleteById或hardDelete方法");
+    }
+
+    /**
+     * 删除所有
+     *
+     * @param var1 要删除实体列表
+     */
+    @Override
+    @Deprecated
+    default void deleteAll(final Iterable<? extends T> var1) {
+        throw new RuntimeException("方法尚未实现，请使用deleteById或hardDelete方法");
+    }
+
+    /**
+     * 清空数据表
+     */
+    @Override
+    @Deprecated
+    default void deleteAll() {
+        throw new RuntimeException("方法尚未实现，请使用deleteById或hardDelete方法");
+    }
+
 }

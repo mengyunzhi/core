@@ -1,21 +1,19 @@
 package com.mengyunzhi.core.service;
 
-import com.mengyunzhi.core.annotation.query.GreaterThanOrEqualTo;
-import com.mengyunzhi.core.annotation.query.Ignore;
-import com.mengyunzhi.core.annotation.query.In;
-import com.mengyunzhi.core.annotation.query.LessThanOrEqualTo;
+import com.mengyunzhi.core.annotation.query.*;
 import com.mengyunzhi.core.entity.YunzhiEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.persistence.criteria.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.sql.Date;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -97,6 +95,26 @@ public class YunzhiSpecification<O> implements Specification<O> {
                         continue;
                     }
 
+                    if (this.equalTo(root, field, value)) {
+                        logger.debug("执行了equal to 注解查询");
+                        continue;
+                    }
+
+                    if (this.isNull(root, field, value)) {
+                        logger.debug("执行了isNull");
+                        continue;
+                    }
+
+                    if (this.isNotNull(root, field, value)) {
+                        logger.debug("执行了isNull");
+                        continue;
+                    }
+
+                    if (field.getAnnotation(Transient.class) != null) {
+                        logger.debug("该字段未持久化，跳过");
+                        continue;
+                    }
+
                     // 按字段类型进行查询
                     if (value instanceof Boolean) {
                         logger.debug("布尔值");
@@ -142,6 +160,74 @@ public class YunzhiSpecification<O> implements Specification<O> {
         } catch (final Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 不为null
+     *
+     * @param root  根查询
+     * @param field 字段
+     * @param value 值
+     * @return boolean 发现注解true
+     */
+    private boolean isNotNull(From<O, ?> root, Field field, Object value) {
+        final IsNotNull isNotNull = field.getAnnotation(IsNotNull.class);
+        if (isNotNull != null && value != null && !value.equals(false)) {
+            String name = isNotNull.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+            this.andPredicate(this.criteriaBuilder.isNotNull(root.get(name)));
+        }
+
+        return isNotNull != null;
+    }
+
+    /**
+     * 为null
+     *
+     * @param root  根查询
+     * @param field 字段
+     * @param value 值
+     * @return boolean 发现注解true
+     */
+    private boolean isNull(From<O, ?> root, Field field, Object value) {
+        final IsNull isNull = field.getAnnotation(IsNull.class);
+        if (isNull != null && value != null && !value.equals(false)) {
+            String name = isNull.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+            this.andPredicate(this.criteriaBuilder.isNull(root.get(name)));
+        }
+
+        return isNull != null;
+    }
+
+    /**
+     * 完全等于注解，主要用于一些需要进行精确查询的字符串类型
+     * 使用其注解了。
+     *
+     * @param root  查询根
+     * @param field 字段
+     * @param value 值
+     * @return boolean 发现注解true
+     */
+    private boolean equalTo(From<O, ?> root, Field field, Object value) {
+        // 查找开始与结束的注解
+        final EqualTo beginQueryParam = field.getAnnotation(EqualTo.class);
+
+        // 有注解，且值不为null，也不为 空 时，进行查询
+        if (beginQueryParam != null && value != null && !"".equals(value)) {
+            String name = beginQueryParam.name();
+            if ("".equals(name)) {
+                name = field.getName();
+            }
+
+            this.andPredicate(this.criteriaBuilder.equal(root.get(name), value));
+        }
+
+        return beginQueryParam != null;
     }
 
     private static boolean checkFinalOrStatic(final Field field) {
@@ -262,7 +348,7 @@ public class YunzhiSpecification<O> implements Specification<O> {
                     this.andPredicate(this.criteriaBuilder.lessThanOrEqualTo(root.get(name).as(Calendar.class), calendarValue));
                 }
             } else if (value instanceof Date) {
-                logger.debug("Sql.Date类型");
+                logger.debug("java.util.date类型");
                 final Date dateValue = (Date) value;
                 if (isBegin) {
                     this.andPredicate(this.criteriaBuilder.greaterThanOrEqualTo(root.get(name).as(Date.class), dateValue));
