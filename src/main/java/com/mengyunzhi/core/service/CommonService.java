@@ -8,8 +8,15 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
@@ -21,6 +28,16 @@ import java.util.stream.IntStream;
  */
 public interface CommonService {
     Logger logger = LoggerFactory.getLogger(CommonService.class);
+
+    /**
+     * 字符串格式化
+     */
+    String dataPattern = "yyyy年M月d日";
+    /**
+     * 加密算法
+     */
+    String SHA_256 = "SHA-256";
+
     /**
      * 十六进制字符数组
      */
@@ -52,6 +69,55 @@ public interface CommonService {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * 将字节数组转换为无符号十六进制字符串
+     *
+     * @param bytes 数组
+     * @return java.lang.String
+     * @author htx
+     * @date 上午11:40 19-7-20
+     **/
+    static String convertByteArrayToUnsignedHexString(final byte[] bytes) {
+        // Create Hex String
+        final StringBuilder hexString = new StringBuilder();
+        // 字节数组转换为 十六进制 数
+        IntStream.range(0, bytes.length).mapToObj(i -> Integer.toHexString(bytes[i] & 0xFF)).forEach(shaHex -> {
+            if (shaHex.length() < 2) {
+                hexString.append(0);
+            }
+            hexString.append(shaHex);
+        });
+        return hexString.toString();
+    }
+
+    /**
+     * calendar 转换为日期
+     *
+     * @param calendar 日历
+     * @return 日期字符串
+     */
+    static String convertCalendarToDateString(final Calendar calendar) {
+        return convertCalendarToDateString(calendar, dataPattern);
+    }
+
+    /**
+     * calendar 转换为日期字符串
+     *
+     * @param calendar    日历
+     * @param dataPattern 格式化
+     * @return 日期字符串
+     */
+    static String convertCalendarToDateString(final Calendar calendar, final String dataPattern) {
+        if (calendar == null) {
+            return "";
+        } else {
+            final Date date = calendar.getTime();
+            final DateFormat dateFormat = new SimpleDateFormat(dataPattern);
+            final String dateString = dateFormat.format(date);
+            return dateString;
+        }
     }
 
     /**
@@ -154,6 +220,15 @@ public interface CommonService {
 
 
     /**
+     * 获取一个随机的手机号
+     *
+     * @return 随机字符串
+     */
+    static String getRandomMobileNumber() {
+        return "138888" + getRandomUniqueId().toString();
+    }
+
+    /**
      * 获取随机的INT数
      *
      * @param min 最小值
@@ -244,7 +319,51 @@ public interface CommonService {
         return id;
     }
 
-    // https://www.dexcoder.com/selfly/article/4026
+    /**
+     * 获取日期开始时间 00:00
+     *
+     * @param date 日期
+     * @return java.util.Date 0点的日期
+     **/
+    static Date getStartOfDay(final Date date) {
+        final LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(date.getTime()), ZoneId.systemDefault());
+        final LocalDateTime startOfDay = localDateTime.with(LocalTime.MIN);
+        return Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 生成一次性密码
+     *
+     * @param seed          种子
+     * @param effectiveTime 有效时间
+     * @return 6位密码
+     */
+    static String makeOneTimePassword(final String seed, final Long effectiveTime) {
+        return CommonService.makeOneTimePassword(seed, Calendar.getInstance().getTimeInMillis(), effectiveTime);
+    }
+
+    /**
+     * 生成一次性密码
+     *
+     * @param seed          种子
+     * @param timeMillis    时间戳
+     * @param effectiveTime 有效时长
+     * @return 6位密码
+     */
+    static String makeOneTimePassword(final String seed, final Long timeMillis, final Long effectiveTime) {
+        final long longSeed = Long.parseLong(seed);
+        final long superPasswordTime = timeMillis / effectiveTime + longSeed;
+        final String plaintext = Long.toString(superPasswordTime);
+        return CommonService.sha256(plaintext).substring(Integer.valueOf(String.valueOf(longSeed % 40)), 6);
+    }
+
+    /**
+     * md5加密
+     * https://www.dexcoder.com/selfly/article/4026
+     *
+     * @param str 明文
+     * @return 密文
+     */
     static String md5(final String str) throws Exception {
         try {
             // 生成一个MD5加密计算摘要
@@ -259,7 +378,12 @@ public interface CommonService {
         }
     }
 
-    // 将所有的字段设置为null
+    /**
+     * 将所有的字段设置为null
+     *
+     * @param object 原对象
+     * @return 设置字段均为null后的对象
+     */
     static Object setAllFieldsToNull(final Object object) {
         final List<Field> fields = getAllModelFields(object.getClass());
         try {
@@ -291,7 +415,12 @@ public interface CommonService {
         return object;
     }
 
-    // sha1加密
+    /**
+     * sha1加密
+     *
+     * @param data 加密前数据
+     * @return 加密后数据
+     */
     static String sha1(final String data) {
         try {
             final MessageDigest digest = MessageDigest
@@ -317,6 +446,27 @@ public interface CommonService {
     }
 
     /**
+     * sha256加密
+     *
+     * @param plaintext 明文
+     * @return java.lang.String 加密后的文字
+     * @throws NoSuchAlgorithmException 加密算法不存在
+     * @author htx
+     * @date 上午6:19 19-7-15
+     **/
+    static String sha256(final String plaintext) {
+        try {
+            // 获取sha-256加密字节数组
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            final byte[] hash = digest.digest(plaintext.getBytes(StandardCharsets.UTF_8));
+            return convertByteArrayToUnsignedHexString(hash);
+        } catch (final NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return plaintext;
+    }
+
+    /**
      * 将sql.Date 转换成Calendar
      *
      * @param date sql.Date
@@ -332,5 +482,6 @@ public interface CommonService {
 
         return calendar;
     }
+
 
 }
