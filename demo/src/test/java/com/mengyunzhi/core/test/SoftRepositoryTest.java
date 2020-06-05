@@ -12,4 +12,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = DemoApplication.class)
 public class SoftRepositoryTest {
 
+    public void hardDelete() {
+
+    }
+
+    public void softDelete() {
+
+    }
+
+    public void deleteWithHardDelete() {
+
+    }
+
+    public void deleteWithSoftDelete() {
+
+    }
 }
