@@ -2,10 +2,7 @@ package com.mengyunzhi.core.demo.entity;
 
 import com.mengyunzhi.core.entity.YunzhiEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author panjie
@@ -15,7 +12,10 @@ public class Student implements YunzhiEntity<Integer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Boolean deleted = false;
+    private final Boolean deleted = false;
+
+    @Column(nullable = false)
+    private final Long deleteAt = 0L;
 
     @Override
     public Integer getId() {
@@ -27,7 +27,12 @@ public class Student implements YunzhiEntity<Integer> {
         return this.deleted;
     }
 
-    public void setId(Integer id) {
+    @Override
+    public long getDeleteAt() {
+        return this.deleteAt;
+    }
+
+    public void setId(final Integer id) {
         this.id = id;
     }
 }

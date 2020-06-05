@@ -94,9 +94,9 @@ public interface KlassRepository extends CrudRepository<Klass, Long>, JpaSpecifi
 </configuration>
 ----
 
-2. 夺
-
 == 超密
+
+CommonService中提供了makeOneTimePassword方法。在传入种子时推荐使用动态关键字+固定的种子的方法，以免种子被破解。
 
 == 开发选项
 1. 将注释掉的子TEST模块启用

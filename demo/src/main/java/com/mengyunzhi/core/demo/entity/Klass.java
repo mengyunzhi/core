@@ -15,21 +15,43 @@ import javax.persistence.*;
 public class Klass implements YunzhiEntity<Long> {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean deleted = false;
 
-    private String name;        // 班级名称
+    private final Boolean deleted = false;
 
-    private Short totalStudentCount;    // 学生总数
+    @Column(nullable = false)
+    private final Long deleteAt = 0L;
 
-    private Integer integerTest;        // 整形测试
+    /**
+     * 班级名称
+     */
+    private String name;
 
-    private Long longTest;              // 长整形测试
+    /**
+     * 学生总数
+     */
+    private Short totalStudentCount;
 
+    /**
+     * 整形测试
+     */
+    private Integer integerTest;
+
+    /**
+     * 长整形测试
+     */
+    private Long longTest;
+
+    /**
+     * 手动equal测试字段
+     */
     @EqualTo
     private String address;
 
-    private String nullField;       // 空字段
-
+    /**
+     * 空字段
+     * 查询时本字段的值与address值进行比对
+     */
+    private String nullField;
     @EqualTo(name = "address")
     @Transient
     private String queryAddress;
@@ -37,8 +59,11 @@ public class Klass implements YunzhiEntity<Long> {
     @ManyToOne
     private Teacher teacher;
 
+    /**
+     * 忽略本查询条件
+     */
     @ManyToOne
-    @Ignore           // 忽略查询条件
+    @Ignore
     private Teacher ignoreTeacher;
 
     @IsNull(name = "longTest")
@@ -51,107 +76,113 @@ public class Klass implements YunzhiEntity<Long> {
 
     @Override
     public Boolean getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    @Override
+    public long getDeleteAt() {
+        return this.deleteAt;
+    }
+
+    @Deprecated
+    private static void setDeleted(final Boolean deleted) {
+        throw new RuntimeException("禁止手动对deleteAt字段赋值");
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     public Teacher getTeacher() {
-        return teacher;
+        return this.teacher;
     }
 
-    public void setTeacher(Teacher teacher) {
+    public void setTeacher(final Teacher teacher) {
         this.teacher = teacher;
     }
 
     public Short getTotalStudentCount() {
-        return totalStudentCount;
+        return this.totalStudentCount;
     }
 
-    public void setTotalStudentCount(Short totalStudentCount) {
+    public void setTotalStudentCount(final Short totalStudentCount) {
         this.totalStudentCount = totalStudentCount;
     }
 
     public Integer getIntegerTest() {
-        return integerTest;
+        return this.integerTest;
     }
 
-    public void setIntegerTest(Integer integerTest) {
+    public void setIntegerTest(final Integer integerTest) {
         this.integerTest = integerTest;
     }
 
     public Long getLongTest() {
-        return longTest;
+        return this.longTest;
     }
 
-    public void setLongTest(Long longTest) {
+    public void setLongTest(final Long longTest) {
         this.longTest = longTest;
     }
 
     public Teacher getIgnoreTeacher() {
-        return ignoreTeacher;
+        return this.ignoreTeacher;
     }
 
     public String getAddress() {
-        return address;
+        return this.address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(final String address) {
         this.address = address;
     }
 
     public String getQueryAddress() {
-        return queryAddress;
+        return this.queryAddress;
     }
 
-    public void setQueryAddress(String queryAddress) {
+    public void setQueryAddress(final String queryAddress) {
         this.queryAddress = queryAddress;
     }
 
     public Boolean getLongTestIsNull() {
-        return longTestIsNull;
+        return this.longTestIsNull;
     }
 
-    public void setLongTestIsNull(Boolean longTestIsNull) {
+    public void setLongTestIsNull(final Boolean longTestIsNull) {
         this.longTestIsNull = longTestIsNull;
     }
 
     public String getNullField() {
-        return nullField;
+        return this.nullField;
     }
 
-    public void setNullField(String nullField) {
+    public void setNullField(final String nullField) {
         this.nullField = nullField;
     }
 
     public Boolean getNotNullFiled() {
-        return notNullFiled;
+        return this.notNullFiled;
     }
 
-    public void setNotNullFiled(Boolean notNullFiled) {
+    public void setNotNullFiled(final Boolean notNullFiled) {
         this.notNullFiled = notNullFiled;
     }
 
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
-    public void setIgnoreTeacher(Teacher ignoreTeacher) {
+    public void setIgnoreTeacher(final Teacher ignoreTeacher) {
         this.ignoreTeacher = ignoreTeacher;
     }
 }

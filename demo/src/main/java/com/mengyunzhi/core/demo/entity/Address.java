@@ -2,10 +2,7 @@ package com.mengyunzhi.core.demo.entity;
 
 import com.mengyunzhi.core.entity.YunzhiEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 住址
@@ -16,60 +13,76 @@ public class Address implements YunzhiEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Boolean deleted = false;
-    private String city;        // 市
-    private String county;      // 县
-    private Integer num;        // 号
+    private final Boolean deleted = false;
+
+    @Column(nullable = false)
+    private final Long deleteAt = 0L;
+
+    /**
+     * 市
+     */
+    private String city;
+    /**
+     * 县
+     */
+    private String county;
+
+    /**
+     * 编号
+     */
+    private Integer num;
 
     public Address() {
     }
 
     @Override
     public Boolean getDeleted() {
-        return deleted;
+        return this.deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    @Override
+    public long getDeleteAt() {
+        return this.deleteAt;
     }
 
     public String getCity() {
-        return city;
+        return this.city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
     public String getCounty() {
-        return county;
+        return this.county;
     }
 
-    public void setCounty(String county) {
+    public void setCounty(final String county) {
         this.county = county;
     }
 
     public Integer getNum() {
-        return num;
+        return this.num;
     }
 
-    public void setNum(Integer num) {
+    public void setNum(final Integer num) {
         this.num = num;
     }
     @Override
     public Long getId() {
-        return id;
+        return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
     @Override
-    public void setAllFieldsToNull() {
+    public Address setAllFieldsToNull() {
         this.id = null;
         this.city = null;
         this.county = null;
         this.num = null;
+        return this;
     }
 }

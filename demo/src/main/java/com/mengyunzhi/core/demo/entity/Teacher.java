@@ -3,10 +3,13 @@ package com.mengyunzhi.core.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mengyunzhi.core.annotation.query.GreaterThanOrEqualTo;
 import com.mengyunzhi.core.annotation.query.LessThanOrEqualTo;
+import com.mengyunzhi.core.entity.BaseYunzhiEntity;
 import com.mengyunzhi.core.entity.YunzhiEntity;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
@@ -14,31 +17,38 @@ import java.util.Calendar;
  * @author panjie
  */
 @Entity
-public class Teacher implements YunzhiEntity<Long> {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    private Boolean deleted  = false;
-
+public class Teacher extends BaseYunzhiEntity implements YunzhiEntity<Long> {
     private String name;
+    /**
+     * 住址
+     */
     @ManyToOne
-    private Address address;    // 住址
+    private Address address;
 
+    /**
+     * 创建时间
+     */
     @CreationTimestamp
-    private Calendar createTime;    // 创建时间
+    private Calendar createTime;
 
     @CreationTimestamp
     private Timestamp createTimestamp;
 
+    /**
+     * 用于查询的开始创建时间
+     */
     @Transient
     @JsonIgnore
     @GreaterThanOrEqualTo(name = "createTime")
-    private Calendar beginCreateTime;   // 用于查询的开始创建时间
+    private Calendar beginCreateTime;
 
+    /**
+     * 用于查询的结束创建时间
+     */
     @Transient
     @JsonIgnore
     @LessThanOrEqualTo(name = "createTime")
-    private Calendar endCreateTime;     // 用于查询的结束创建时间
+    private Calendar endCreateTime;
 
     @Transient
     @JsonIgnore
@@ -52,80 +62,70 @@ public class Teacher implements YunzhiEntity<Long> {
 
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
     public Address getAddress() {
-        return address;
+        return this.address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(final Address address) {
         this.address = address;
     }
 
     public Calendar getCreateTime() {
-        return createTime;
+        return this.createTime;
     }
 
-    public void setCreateTime(Calendar createTime) {
+    public void setCreateTime(final Calendar createTime) {
         this.createTime = createTime;
     }
 
     public Calendar getBeginCreateTime() {
-        return beginCreateTime;
+        return this.beginCreateTime;
     }
 
-    public void setBeginCreateTime(Calendar beginCreateTime) {
+    public void setBeginCreateTime(final Calendar beginCreateTime) {
         this.beginCreateTime = beginCreateTime;
     }
 
     public Calendar getEndCreateTime() {
-        return endCreateTime;
+        return this.endCreateTime;
     }
 
-    public void setEndCreateTime(Calendar endCreateTime) {
+    public void setEndCreateTime(final Calendar endCreateTime) {
         this.endCreateTime = endCreateTime;
     }
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public Boolean getDeleted() {
-        return this.getDeleted();
-    }
-
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
     public Timestamp getCreateTimestamp() {
-        return createTimestamp;
+        return this.createTimestamp;
     }
 
-    public void setCreateTimestamp(Timestamp createTimestamp) {
+    public void setCreateTimestamp(final Timestamp createTimestamp) {
         this.createTimestamp = createTimestamp;
     }
 
     public Timestamp getBeginCreateTimestamp() {
-        return beginCreateTimestamp;
+        return this.beginCreateTimestamp;
     }
 
-    public void setBeginCreateTimestamp(Timestamp beginCreateTimestamp) {
+    public void setBeginCreateTimestamp(final Timestamp beginCreateTimestamp) {
         this.beginCreateTimestamp = beginCreateTimestamp;
     }
 
     public Timestamp getEndCreateTimestamp() {
-        return endCreateTimestamp;
+        return this.endCreateTimestamp;
     }
 
-    public void setEndCreateTimestamp(Timestamp endCreateTimestamp) {
+    public void setEndCreateTimestamp(final Timestamp endCreateTimestamp) {
         this.endCreateTimestamp = endCreateTimestamp;
     }
 }
