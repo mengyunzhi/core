@@ -1,11 +1,14 @@
 package com.mengyunzhi.core.exception;
 
 /**
- * @author panjie
  * 关联删除异常
+ *
+ * @author panjie
  */
 public class AssociateDeleteException extends RuntimeException {
-    public AssociateDeleteException(String message) {
+    private static final long serialVersionUID = -26281546072902699L;
+
+    public AssociateDeleteException(final String message) {
         super(message);
     }
 }

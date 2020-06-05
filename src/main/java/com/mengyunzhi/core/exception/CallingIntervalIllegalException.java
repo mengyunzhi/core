@@ -1,11 +1,13 @@
 package com.mengyunzhi.core.exception;
 
 /**
- * @author panjie
  * 调用间隔非法异常
+ * @author panjie
  */
 public class CallingIntervalIllegalException extends RuntimeException {
-    public CallingIntervalIllegalException(String message) {
+    private static final long serialVersionUID = 4053838713399923245L;
+
+    public CallingIntervalIllegalException(final String message) {
         super(message);
     }
 }
