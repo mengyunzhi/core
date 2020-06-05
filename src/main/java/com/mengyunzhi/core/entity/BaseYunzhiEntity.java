@@ -1,15 +1,14 @@
 package com.mengyunzhi.core.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * 基类
+ * 添加MappedSuperclass防止继承于此类的实体报 No identifier specified for entity 错误
  *
  * @author panjie
  */
+@MappedSuperclass
 public abstract class BaseYunzhiEntity implements YunzhiEntity<Long> {
 
     @Id

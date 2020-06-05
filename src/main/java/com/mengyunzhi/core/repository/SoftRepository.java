@@ -82,7 +82,7 @@ public interface SoftRepository<T extends YunzhiEntity<ID>, ID extends Serializa
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("update #{#entityName} e set e.deleteAt = UNIX_TIMESTAMP() and e.deleted = true where e.id = ?1")
+    @Query("update #{#entityName} e set e.deleteAt = UNIX_TIMESTAMP(), e.deleted = true where e.id = ?1")
     void softDelete(Long id);
 
     /**
@@ -97,7 +97,7 @@ public interface SoftRepository<T extends YunzhiEntity<ID>, ID extends Serializa
      */
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {})
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("delete from User user where user.id = ?1")
+    @Query("delete from #{#entityName} e where e.id = ?1")
     void hardDelete(Long id);
 
     /**
